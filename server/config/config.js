@@ -5,7 +5,7 @@ const dbPort = 27017;
 const dbUser = "admin";
 const dbPassword = "admin";
 const config = {
-    mongoURL: process.env.MONGO_URL || `mongodb://${dbHost}:${dbPort}/${databaseName}`,
+    mongoURL: process.env.MONGO_URL || `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${databaseName}`,
     port: process.env.PORT || 8001,
     dbPort,
     databaseName,
@@ -29,3 +29,4 @@ const config = {
     },
 };
  export default config;
+

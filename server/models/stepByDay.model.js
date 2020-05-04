@@ -27,7 +27,6 @@ const StepByDaySchema = mongooge.Schema({
     h22: {type: Number, default: 0},
     h23: {type: Number, default: 0},
     h24: {type: Number, default: 0},
-
 },{timestamp: true});
 StepSchema.set("toJSON",{
     transform(doc, ret, options){
