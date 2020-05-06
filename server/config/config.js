@@ -10,22 +10,11 @@ const config = {
     dbPort,
     databaseName,
     serverPort,
+    //jwt
     jwtSecret: '',
-    kue: {
-        prefix: 'q',
-        redis: {
-            port: 6379,
-            host: 'localhost',
-            db: 4,
-            options: {
-                // see https://github.com/mranney/node_redis#rediscreateclient
-            }
-        }
-    },
-    kueUI: {
-        username: '',
-        password: '',
-        port: 3051
+    //rabbitmq
+    rabbitMQ: {
+        url: process.env.RABBIT_URL || 'amqp://localhost'
     },
 };
  export default config;
