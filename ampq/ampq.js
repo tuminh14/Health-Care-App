@@ -1,9 +1,8 @@
-import ampq from 'ampqlib'
-import config from '../server/config/config.js'
- export default class AMPQ {
+import ampq from 'amqplib'
+import config from '../server/config/config'
+export default class AMPQ {
     static channel = null;
     static queues = {};
-
     static initChannel(){
         return new Promise((resolve,reject)=>{
             let channel = AMPQ.channel;
@@ -26,6 +25,7 @@ import config from '../server/config/config.js'
     static getChannel(){
         return AMPQ.channel;
     }
+
     static initQueue(queueName, durable=true){
         let channel;
         try{
@@ -40,8 +40,9 @@ import config from '../server/config/config.js'
         }
         return AMPQ.queues[queueName];
     }
+
     static sendDataToRabbit(queueName,data){
-        if(!data || !(typeof data ==='object') || !(typeof data === 'string')) {
+        if(!data || (!(typeof data ==='object') && !(typeof data === 'string'))) {
            throw Error('Data must be string or object');
         }
         if(typeof data ==='object'){
