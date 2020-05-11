@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { createWorkers } from './workers';
+import { createWorkers } from './workers/index';
 import { MONGO_CONNECTION_STRING } from './config/config';
 
 mongoose.Promise = global.Promise;
