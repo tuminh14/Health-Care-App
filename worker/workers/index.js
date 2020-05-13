@@ -3,9 +3,11 @@ import AMPQ from '../../ampq/ampq'
 export async function createQueue(){
     try {
         await AMPQ.initChannel();
+        // Import worker
         AMPQ.initQueue('test');
-    }catch {
-        console.log('loi con me may roi thang ngu')
+    }catch (error){
+        console.error('AMPQ: createWorkers initChannel error: ');
+        console.error(error);
     }
 }
 export function createWorkers() {
