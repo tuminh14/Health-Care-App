@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 })
 
 // import api here
-
+app.route('/');
 app.use(errorHandler);
 
 app.listen(config.port, (error) => {
