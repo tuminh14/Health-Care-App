@@ -12,6 +12,13 @@ const globalConstant = {
     ACTIVATED: 1,
     DEACTIVATED: 0,
     PENDING: 2
+  },
+  tokenLife: {
+    ONE_HOUR : 3600,
+    ONE_DAY : 3600 * 24,
+    ONE_MONTH : 3600 * 24 * 30,
+    ONE_YEAR : 3600 * 24 * 30 * 365
   }
+
 };
 export default globalConstant;
