@@ -1,8 +1,8 @@
 import Express from 'express';
 import mongoose from "mongoose";
 import bodyParser from 'body-parser';
-
 import config from "./config/config"
+import {dummyUser} from "./mongo/dummyData";
 import AMPQ from "../ampq/ampq"
 import { createQueue, createWorkers} from "../worker/workers";
 import errorHandler from './util/helper/errorHandler';
@@ -27,7 +27,7 @@ mongoose.connect(config.mongoURL,{ useNewUrlParser: true, useUnifiedTopology: tr
 createQueue().then(()=>{
     createWorkers();
 });
-
+console.log(config.mongoURL)
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use((req, res, next) => {
