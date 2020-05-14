@@ -8,7 +8,7 @@ export async function dummyUser(){
             passWord: "kOp1kpas",
             phoneNumber: "0943686018",
             gender: globalConstant.gender.MALE,
-            birthDay: Date.parse('14/06/1999'),
+            birthDay: Date.now(),
             role: globalConstant.role.ROOT,
             weight: 10,
             height: 36
