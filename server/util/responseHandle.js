@@ -15,7 +15,8 @@ export default class ResponseHandler {
     }
 
     error(error) {
-        return this.res.status(error.status|| 500).json({
+        const statusCode = (typeof error.status !== "undefined") ? error.status : 500
+        return this.res.status(statusCode).json({
             error : error
         })
     }

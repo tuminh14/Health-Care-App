@@ -3,9 +3,15 @@ export default (error, req, res, next) => {
         console.error(error.stack);
     }
     
-    const status = error.status|| 500;
-    const payload = status === 500 ? error.message : 'Internal server error';
+    const statusCode =(typeof error.status !== "undefined") ? error.status : 500;
+    const payload = statusCode === 500 ? error.message : 'Internal server error';
     
-    res.status(status).json(payload);
-
+    if (typeof payload === 'string') {
+        res.status(statusCode).send(payload);
+    } else {
+        res.status(statusCode).json({
+            success: false,
+            error: payload
+        });
+    }
 }

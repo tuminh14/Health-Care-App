@@ -1,6 +1,7 @@
 import Express from 'express';
 import mongoose from "mongoose";
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
 import config from "./config/config"
 import AMPQ from "../ampq/ampq"
@@ -21,24 +22,34 @@ mongoose.connect(config.mongoURL,{ useNewUrlParser: true, useUnifiedTopology: tr
         throw error;
     } else {
         console.log('Mongodb connected!');
-        dummyUser();
+        // dummyUser();
     }
 });
-createQueue().then(()=>{
-    createWorkers();
-});
+// createQueue().then(()=>{
+//     createWorkers();
+// });
+
+app.use(morgan(config.MORGAN_FORMAT, {
+    skip: (req, res) => res.status < 400,
+    stream: process.stderr,
+}))
+app.use(morgan(config.MORGAN_FORMAT, {
+    skip: (req, res) => res.status >= 400,
+    stream: process.stdout
+}));
 
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use((req, res, next) => {
     let langCode = req.headers.lang || req.query.lang;
     if (!langCode || langClan === 'null' || langCode === 'undefined') {
-        req.headeha.lang = 'en';
+        req.headers.lang = 'en';
     }
-    return next();
+    next();
 })
 app.use((req, res, next) => {
-    res.RH = new responseHandle;
+    res.RH = new responseHandle(res);
+    next();
 })
 
 // import api here

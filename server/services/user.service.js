@@ -5,10 +5,9 @@ import hashPassword from '../util/helper/hashPassword';
 export async function registry(user) {
     const data = {
         email: user.email,
-        fullname: user.fullname,
+        fullName: user.fullName,
         phoneNumber: user.phoneNumber,
-        gender: user.gender,
-        birthday: user.birthday,
+        birthDay: user.birthDay,
         role: globalConstants.role.USER,
         active: globalConstants.activate.DEACTIVATED,
         online: false,
@@ -24,16 +23,25 @@ export async function registry(user) {
             return Promise.reject({status: 403, error: 'email/phone number already created.'});
         }
         
-        data.passWord = hashPassword.hash(user.passWord);
-        let userInsert = await userModel.create(user);
+        data.passWord = await hashPassword.hash(user.passWord);
+        if (user.gender === 'male') {
+            data.gender = globalConstants.gender.MALE;
+        } else {
+            if (user.gender === 'female') {
+                data.gender = globalConstants.gender.FEMALE;
+            } else {
+                data.gender = globalConstants.gender.OTHER;
+            }
+        }   
+        let userInsert = await userModel.create(data);
         return userInsert.toJSON();
 
     } catch (error) {
         console.error('error userRegistry: ', error);
         return Promise.reject(
             { 
-                status: erorr.status || 500,
-                error: error.message || error.errors. ||'Server Internal Error'
+                status: error.status || 500,
+                error: error.message || error.errors||'Server Internal Error'
             }
         )
     }

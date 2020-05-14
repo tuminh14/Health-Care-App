@@ -16,7 +16,7 @@ const UserSchema = mongooge.Schema({
 UserSchema.set("toJSON",{
     transform(doc, ret, options){
         delete ret.__v;
-        delete ret.password;
+        delete ret.passWord;
     }
 });
 export default mongooge.model("User", UserSchema);
