@@ -15,7 +15,7 @@ export default class ResponseHandler {
     }
 
     error(error) {
-        return this.res.status(error.statusCode || 500).json({
+        return this.res.status(error.status|| 500).json({
             error : error
         })
     }

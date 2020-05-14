@@ -5,9 +5,10 @@ import bodyParser from 'body-parser';
 import config from "./config/config"
 import AMPQ from "../ampq/ampq"
 import { createQueue, createWorkers} from "../worker/workers";
-import User from "./models/users.model"
 import errorHandler from './util/helper/errorHandler';
 import responseHandle from './util/responseHandle'
+
+import users from './routes/user.routes';
 // Initialize the Express app
 var app = new Express();
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 })
 
 // import api here
+app.use('/api',[users]);
 
 app.use(errorHandler);
 
