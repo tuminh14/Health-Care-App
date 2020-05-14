@@ -4,11 +4,12 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
 import config from "./config/config"
-import AMPQ from "../ampq/ampq"
+import * as dummy from "./mongo/dummyData";
+import AMPQ from "../ampq/ampq";
 import { createQueue, createWorkers} from "../worker/workers";
 import errorHandler from './util/helper/errorHandler';
 import responseHandle from './util/responseHandle';
-import {dummyUser} from './mongo/dummyData'
+import {dummyUser} from './mongo/dummyData';
 
 import users from './routes/user.routes';
 // Initialize the Express app
@@ -22,7 +23,7 @@ mongoose.connect(config.mongoURL,{ useNewUrlParser: true, useUnifiedTopology: tr
         throw error;
     } else {
         console.log('Mongodb connected!');
-        // dummyUser();
+        dummy.dummyUser();
     }
 });
 // createQueue().then(()=>{
