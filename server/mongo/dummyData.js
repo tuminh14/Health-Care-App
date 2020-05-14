@@ -3,7 +3,7 @@ import globalConstant from "../config/globalConstants";
 
 export async function dummyUser() {
     try {
-        let existedUser = await User.findOne({ email: "duongtrantuminh14@gmail.com" })
+        let existedUser = await User.findOne({ email: "duongtrantuminh14@gmail.com" }).lean()
         if (!existedUser) {
             await User.create({
                 email: "duongtrantuminh14@gmail.com",
