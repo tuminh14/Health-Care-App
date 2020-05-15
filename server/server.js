@@ -26,9 +26,9 @@ mongoose.connect(config.mongoURL,{ useNewUrlParser: true, useUnifiedTopology: tr
         dummy.dummyUser();
     }
 });
-// createQueue().then(()=>{
-//     createWorkers();
-// });
+createQueue().then(()=>{
+    createWorkers();
+});
 
 app.use(morgan(config.MORGAN_FORMAT, {
     skip: (req, res) => res.status < 400,
