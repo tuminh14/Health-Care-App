@@ -4,8 +4,10 @@
   "description": "Mid term app Mobile Develope",
   "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start:prod": "cross-env NODE_ENV=production pm2 start server.js --name health-care-app",
+    "worker": "cross-env NODE_ENV=production pm2 start worker/worker.js -i 1 --name worker"
   },
   "repository": {
     "type": "git",
@@ -30,7 +32,8 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-gyp": "^6.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
