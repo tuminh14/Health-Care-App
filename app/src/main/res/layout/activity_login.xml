@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bgsign"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@drawable/bgsign">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/text_view_sign_in_or_sign_up"
+        android:inputType="textEmailAddress"
+        android:id="@+id/text_view_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -20,74 +25,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <EditText
-        android:visibility="gone"
         android:id="@+id/edit_text_email"
         android:layout_width="288dp"
         android:layout_height="50dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/bginput"
-        android:hint="Email Address"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:textColorHint="#87ffffff"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_sign_in_or_sign_up" />
-
-
-    <EditText
-        android:visibility="gone"
-        android:id="@+id/edit_text_name"
-        android:layout_width="288dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="48dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/bginput"
-        android:hint="Complete Name"
+        android:hint="Email"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:textColorHint="#87ffffff"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_email" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_sign_in" />
 
     <EditText
-        android:visibility="gone"
-        android:id="@+id/edit_text_country"
-        android:layout_width="288dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/bginput"
-        android:hint="Country Location"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:textColorHint="#87ffffff"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
-
-    <EditText
-        android:id="@+id/edit_text_username"
-        android:layout_width="288dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/bginput"
-        android:hint="Username"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:textColorHint="#87ffffff"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_country" />
-
-
-    <EditText
-        android:password="true"
+        android:inputType="textPassword"
         android:id="@+id/edit_text_password"
         android:layout_width="288dp"
         android:layout_height="50dp"
@@ -100,7 +54,7 @@
         android:paddingBottom="10dp"
         android:textColorHint="#87ffffff"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_username" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_email" />
 
     <Button
         android:id="@+id/btn_sign_in"
@@ -120,14 +74,14 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_password" />
 
     <Button
-        android:id="@+id/btn_create_or_register"
+        android:id="@+id/btn_register"
         android:layout_width="168dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/bgbtn"
-        android:text="Create Account"
+        android:text="Register"
         android:textAllCaps="false"
         android:textColor="#FFF"
         android:textSize="18sp"
@@ -137,3 +91,4 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
