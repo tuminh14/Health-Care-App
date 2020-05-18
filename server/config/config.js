@@ -11,7 +11,7 @@ const config = {
     databaseName,
     serverPort,
     //jwt
-    jwtSecret: '',
+    jwtSecret: 'abc',
     //rabbitmq
     rabbitMQ: {
         url: process.env.RABBIT_URL || 'amqp://localhost'

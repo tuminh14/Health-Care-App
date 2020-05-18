@@ -32,4 +32,8 @@ export const registry = validate([
     body('height', 'Invalid height').trim().isNumeric(),
     
 ]);
+export const login = validate([
+    body('email', 'Invalid email').isEmail(),
+    body('passWord', 'password more than 6 digits').trim().isLength({ min: 6 }),
+]);
     

@@ -9,3 +9,12 @@ export async function registry(req, res) {
         return res.RH.error(error);
     }
 }
+export async function login(req, res) {
+    try {
+        let options = req.body;
+        let payload = await userService.login(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.error(error);
+    }
+}
