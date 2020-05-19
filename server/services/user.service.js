@@ -24,7 +24,7 @@ export async function registry(user) {
         if (existUser) {
             return Promise.reject({status: 403, error: 'email/phone number already created.'});
         }
-        
+
         data.passWord = await hashPassword.hash(user.passWord);
         if (user.gender === 'male') {
             data.gender = globalConstants.gender.MALE;
@@ -34,14 +34,14 @@ export async function registry(user) {
             } else {
                 data.gender = globalConstants.gender.OTHER;
             }
-        }   
+        }
         let userInsert = await userModel.create(data);
         return userInsert.toJSON();
 
     } catch (error) {
         console.error('error userRegistry: ', error);
         return Promise.reject(
-            { 
+            {
                 status: error.status || 500,
                 error: error.message || error.errors||'Server Internal Error'
             }
@@ -58,10 +58,11 @@ export async function login(user) {
         let existUser = await userModel.findOne({ email: data.email.toString()});
 
         if (!existUser) {
-            return Promise.reject({status: 403, error: 'Incorrect email/password.'}); 
+            return Promise.reject({status: 403, error: 'Incorrect email/password.'});
         }
 
-        if (hashPassword.compare(data.passWord, existUser.passWord))
+        let result = await hashPassword.compare(data.passWord, existUser.passWord);
+        if (result)
         {
             if (existUser.activeMail === globalConstants.activate.ACTIVATED) {
                 await userModel.updateOne( {
@@ -77,7 +78,7 @@ export async function login(user) {
                     token: token
                 }
             }
-            return Promise.reject({status: 403, error: 'Account must be activated.'}); 
+            return Promise.reject({status: 403, error: 'Account must be activated.'});
 
         }
         return Promise.reject({status: 403, error: 'Incorrect email/password.'});
@@ -86,7 +87,7 @@ export async function login(user) {
     } catch (error) {
         console.error('error userLogin: ', error);
         return Promise.reject(
-            { 
+            {
                 status: error.status || 500,
                 error: error.message || error.errors||'Server Internal Error'
             }
