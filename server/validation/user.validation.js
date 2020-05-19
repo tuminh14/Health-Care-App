@@ -11,9 +11,9 @@ const validate = validations => {
         } else {
             res.status(403);
             
-            let msgErrors = [];
+            let msgErrors = {};
             errors.array().forEach(error => {
-                msgErrors.push(error.msg)
+                msgErrors[error.param] = error.msg;
             })
             res.RH.successError(msgErrors);
         }
