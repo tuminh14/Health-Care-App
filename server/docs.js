@@ -7,7 +7,7 @@ const swaggerDefinition = {
         version: '1.0.0',
         description: 'Health Care App API Docs V1',
     },
-    host: `localhost:${config.serverPort}`,
+    host: `${config.serverHost}:${config.serverPort}`,
     basePath: '/api',
     produces: ['application/json'],
     consumes: ['application/json'],
