@@ -17,6 +17,12 @@ const config = {
     rabbitMQ: {
         url: process.env.RABBIT_URL || 'amqp://localhost'
     },
+    CORS_OPTIONS : {
+        // Find and fill your options here: https://github.com/expressjs/cors#configuration-options
+        origin: process.env.SERVER_ORIGIN || '*',
+        methods: 'GET,PUT,POST,DELETE',
+        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,Accept-Language',
+    }
 };
  export default config;
 

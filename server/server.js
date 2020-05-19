@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
-import swaggerSpec from './docs';
+import cors from 'cors';
 
+import swaggerSpec from './docs';
 import config from "./config/config"
 import * as dummy from "./mongo/dummyData";
 import AMPQ from "../ampq/ampq";
@@ -40,6 +41,8 @@ app.use(morgan(config.MORGAN_FORMAT, {
     skip: (req, res) => res.status >= 400,
     stream: process.stdout
 }));
+// Note: All import correquest handle use CORS must be write bellow CORS settings
+app.use(cors(config.CORS_OPTIONS));
 
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
