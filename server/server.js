@@ -2,6 +2,8 @@ import Express from 'express';
 import mongoose from "mongoose";
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import swaggerUI from 'swagger-ui-express';
+import swaggerSpec from './docs';
 
 import config from "./config/config"
 import * as dummy from "./mongo/dummyData";
@@ -48,6 +50,7 @@ app.use((req, res, next) => {
     }
     next();
 })
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use((req, res, next) => {
     res.RH = new responseHandle(res);
     next();
