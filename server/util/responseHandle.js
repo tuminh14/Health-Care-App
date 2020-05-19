@@ -20,4 +20,17 @@ export default class ResponseHandler {
             error : error
         })
     }
+
+    successError(error) {
+        if (!error) {
+            return this.res.json({
+                success : false
+            }); 
+        } else {
+            return this.res.json({
+                success : false,
+                error : error
+            });
+        } 
+    }
 }
