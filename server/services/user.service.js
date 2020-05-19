@@ -1,6 +1,8 @@
 import globalConstants from '../config/globalConstants';
 import userModel from '../models/users.model';
 import hashPassword from '../util/helper/hashPassword';
+import JWT from '../util/jwt';
+import config from '../config/config';
 
 export async function registry(user) {
     const data = {
@@ -38,6 +40,51 @@ export async function registry(user) {
 
     } catch (error) {
         console.error('error userRegistry: ', error);
+        return Promise.reject(
+            { 
+                status: error.status || 500,
+                error: error.message || error.errors||'Server Internal Error'
+            }
+        )
+    }
+}
+
+export async function login(user) {
+    const data = {
+        email: user.email,
+        passWord: user.passWord
+    }
+    try {
+        let existUser = await userModel.findOne({ email: data.email.toString()});
+
+        if (!existUser) {
+            return Promise.reject({status: 403, error: 'Incorrect email/password.'}); 
+        }
+
+        if (hashPassword.compare(data.passWord, existUser.passWord))
+        {
+            if (existUser.activeMail === globalConstants.activate.ACTIVATED) {
+                await userModel.updateOne( {
+                    _id: existUser._id
+                }, {
+                    $set: {
+                        online: true
+                    }
+                });
+                let token = await JWT.issue({_id: existUser._id}, config.jwtSecret);
+                return {
+                    user: existUser,
+                    token: token
+                }
+            }
+            return Promise.reject({status: 403, error: 'Account must be activated.'}); 
+
+        }
+        return Promise.reject({status: 403, error: 'Incorrect email/password.'});
+
+
+    } catch (error) {
+        console.error('error userLogin: ', error);
         return Promise.reject(
             { 
                 status: error.status || 500,

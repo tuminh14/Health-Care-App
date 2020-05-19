@@ -8,6 +8,13 @@ router.route('/user/registry')
     .post(
         userValidation.registry,
         userController.registry
+    );
+
+router.route('/user/login')
+    .post(
+        userValidation.login,
+        userController.login
     )
+
 
 export default router;
