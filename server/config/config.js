@@ -9,6 +9,7 @@ const config = {
     port: process.env.PORT || 8001,
     dbPort,
     databaseName,
+    serverHost: process.env.SERVER_HOST || 'localhost',
     serverPort,
     //jwt
     jwtSecret: 'abc',
