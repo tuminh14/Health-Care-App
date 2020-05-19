@@ -1,4 +1,4 @@
-const serverPort = 8001; // The port server will running
+const serverPort = 3001; // The port server will running
 const dbHost = process.env.MONGO_HOST||'localhost';
 const databaseName = process.env.MONGO_DATABASE_NAME||'health-care-app';
 const dbPort = process.env.MONGO_PORT||27017;
