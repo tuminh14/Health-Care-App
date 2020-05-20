@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editName, editGender, editWeight, editHeight, editPhoneNumber, editBirthDay, editEmail, editPassword;
     Button btnCreate;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    private String test = new String();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +59,60 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    if (editEmail.getText().toString().trim().matches(emailPattern)) {
-                        Toast.makeText(getApplicationContext(),"Email hợp lệ",Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(),"Email không hợp lệ", Toast.LENGTH_SHORT).show();
+//                     postData();
+//                    new TestAsyncTask().execute();
+//                    Toast.makeText(RegisterActivity.this, "test = " + test, Toast.LENGTH_SHORT).show();
+
+                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
+                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
+                    } else if (!validateJavaDate(editBirthDay.getText().toString().trim())){
+                        Toast.makeText(getApplicationContext(),"Ngày sinh không hợp lệ",Toast.LENGTH_SHORT).show();
+                    } else if(editPassword.getText().toString().trim().length() < 6){
+                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
+                    } else if (editName.getText().toString().trim().length() < 2 ||
+                            editName.getText().toString().trim().length() > 100) {
+                        Toast.makeText(getApplicationContext(),"Tên nhiều hơn 2 ký tự và ít hơn 100 ký tự",Toast.LENGTH_SHORT).show();
+                    } else if (isNumeric(editWeight.getText().toString().trim()) == false){
+                        Toast.makeText(getApplicationContext(),"Cân nặng phải là số",Toast.LENGTH_SHORT).show();
+                    } else if (isNumeric(editHeight.getText().toString().trim()) == false){
+                        Toast.makeText(getApplicationContext(),"Chiều cao phải là số",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         postData();
-                        Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
-                        Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(sub1);
+
                     }
                 }
             }
         });
+    }
+
+    public static boolean isNumeric(String str) {
+        return str.matches("[-+]?\\d*\\.?\\d+");
+    }
+
+    public static boolean validateJavaDate(String strDate)
+    {
+        /*
+         * Set preferred date format,
+         * For example MM-dd-yyyy, MM.dd.yyyy,dd.MM.yyyy etc.*/
+        SimpleDateFormat sdfrmt = new SimpleDateFormat("yyyy-MM-dd");
+        sdfrmt.setLenient(false);
+        /* Create Date object
+         * parse the string into date
+         */
+        try
+        {
+            Date javaDate = sdfrmt.parse(strDate);
+            System.out.println(strDate+" is valid date format");
+        }
+        /* Date format is invalid */
+        catch (ParseException e)
+        {
+            System.out.println(strDate+" is Invalid Date format");
+            return false;
+        }
+        /* Return true if date format is valid */
+        return true;
     }
 
     public void AnhXa(){
@@ -83,13 +131,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void postData() {
         RequestQueue requestQueue=Volley.newRequestQueue(RegisterActivity.this);
-        String url="http://www.voidbraw.com/api/user/registry";
+        String url="http://165.22.107.58/api/user/registry";
 //        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
         try {
             //input your API parameters
-//            object.put("parameter","value");
-//            object.put("parameter","value");
+
             object.put("email",editEmail.getText().toString());
             object.put("passWord",editPassword.getText().toString());
             object.put("phoneNumber",editPhoneNumber.getText().toString());
@@ -98,6 +145,16 @@ public class RegisterActivity extends AppCompatActivity {
             object.put("weight",editWeight.getText().toString());
             object.put("height",editHeight.getText().toString());
             object.put("birthDay",editBirthDay.getText().toString());
+
+//            object.put("email","thien");
+//            object.put("passWord","121212");
+//            object.put("phoneNumber","0918290203");
+//            object.put("fullName","Thien");
+//            object.put("gender","Nam");
+//            object.put("weight","12");
+//            object.put("height","12");
+//            object.put("birthDay","2020-02-02");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -107,9 +164,16 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject jsonObj = response.getJSONObject("payload");
-                            String gender = jsonObj.getString("gender");
-                            Toast.makeText(RegisterActivity.this, "String Response : " + gender, Toast.LENGTH_SHORT).show();
-//                            result_textView.setText("String Response : " + gender);
+
+                            String statusSuccess = new String(); // Trạng thái khi invalid input
+                            statusSuccess = jsonObj.getString("gender");
+
+//                            test = statusSuccess;
+//                            Toast.makeText(RegisterActivity.this, "String Response : " + statusSuccess, Toast.LENGTH_SHORT).show();
+
+                            Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
+                            Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(sub1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -118,10 +182,34 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(RegisterActivity.this, "Error getting response", Toast.LENGTH_SHORT).show();
-//                result_textView.setText("Error getting response");
             }
         });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private class TestAsyncTask extends AsyncTask<Void, String, String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            postData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
     }
 
 }
