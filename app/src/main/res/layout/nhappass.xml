@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#050505"
+    android:backgroundTint="#000000">
+
+    <Button
+        android:id="@+id/btn_aceptOTP2"
+        android:layout_width="194dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="572dp"
+        android:backgroundTint="#3600A9"
+        android:text="Xác Nhận"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="284dp"
+        android:layout_height="157dp"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="83dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <EditText
+        android:id="@+id/editText6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="138dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="LOGO"
+        android:textColor="#F31616"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txt_nhappass"
+        tools:text="Nhập mã OTP"
+        android:layout_width="267dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="332dp"
+        android:backgroundTint="#878787"
+        android:ems="10"
+        android:inputType="phone"
+        android:text="Nhập mât khẩu"
+        android:textColor="#AAAAAA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txt_nhappass2"
+        tools:text="Nhập mã OTP"
+        android:layout_width="267dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="444dp"
+        android:backgroundTint="#878787"
+        android:ems="10"
+        android:inputType="phone"
+        android:text="Nhập lại mật khẩu"
+        android:textColor="#AAAAAA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
