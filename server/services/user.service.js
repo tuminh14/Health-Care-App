@@ -80,7 +80,7 @@ export async function login(user) {
                     token: token
                 }
             }
-            return Promise.reject({ status: 403, error: 'Account must be activated.' });
+            return Promise.reject({ status: 401, error: 'Account must be activated.' });
 
         }
         return Promise.reject({ status: 403, error: 'Incorrect email/password.' });
@@ -181,12 +181,22 @@ export async function verifyPhoneNum(user) {
                     activePhone: globalConstants.activate.ACTIVATED
                 }
             })
+
+            await userModel.updateOne({
+                _id: existUser._id
+            }, {
+                $set: {
+                    online: true
+                }
+            });
+            let token = await JWT.issue({ _id: existUser._id }, config.jwtSecret);
+            return {
+                user: existUser,
+                token: token
+            }
         }
 
-        return {
-            to: payload.to,
-            status: payload.status
-        }
+        return Promise.reject({ status: 401, error: 'Unauthorized' });
 
     } catch (error) {
         console.error('error user verify phone number: ', error);

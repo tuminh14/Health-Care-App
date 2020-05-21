@@ -1,5 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
-import config from './config/config';
+import config from '../config/config';
 
 const swaggerDefinition = {
     info: {
@@ -23,8 +23,8 @@ const swaggerDefinition = {
 const options = {
     swaggerDefinition,
     apis: [
-        'server/routes/*.js',
-        'server/models/*.js'
+        'server/docs/*.docs.js',
+        '../models/*.js'
     ],
 };
 
