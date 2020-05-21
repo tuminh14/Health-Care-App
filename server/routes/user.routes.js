@@ -99,20 +99,8 @@ router.route('/user/registry')
  *        properties:
  *          email:
  *            type: string
- *          phoneNumber:
- *            type: string
  *          passWord:
  *            type: string
- *          fullName:
- *            type: string
- *          gender:
- *            type: string
- *          weight:
- *            type: int
- *          height:
- *            type: int
- *          birthDay:
- *            type: Date
  *        example: {
  *          "email": "duongtrantuminh14@gmail.com",
  *          "passWord": "adminRoot"
@@ -161,7 +149,110 @@ router.route('/user/login')
     .post(
         userValidation.login,
         userController.login
-    )
+    );
+
+/**
+ * @swagger
+ * /user/sendVerifyPhoneNum:
+ *  get:
+ *    summary: Users send verify phone number
+ *    tags:
+ *      - Users
+ *    parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        type: object
+ *        properties:
+ *          phoneNumber:
+ *            type: string
+ *        example: {
+ *          "phoneNumber": "0943686018"
+ *        }
+ *    responses:
+ *       200:
+ *         description: The response details
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *             payload:
+ *               type: string
+ *               description: Data result
+ *           example: {
+*    "success": true,
+*    "payload": {
+*        "to": "+84326152565",
+*        "status": "pending"
+*    }
+*}
+ *       401:
+ *         description: Not permission
+ *       404:
+ *         description: Dat not found
+ *       422:
+ *         description: Unprocessable Entity, the data is not valid
+ *       500:
+ *         description: When got server exception
+ * */
+router.route('/user/sendVerifyPhoneNum')
+    .get(
+        userValidation.sendVerifyPhoneNum,
+        userController.sendVerifyPhoneNum
+    );
+
+/**
+ * @swagger
+ * /user/verifyPhoneNum:
+ *  get:
+ *    summary: Users verify phone number
+ *    tags:
+ *      - Users
+ *    parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        type: object
+ *        properties:
+ *          phoneNumber:
+ *            type: string
+ *        example: {
+ *          "phoneNumber": "0943686018",
+ *          "verifyCode": 902461
+ *        }
+ *    responses:
+ *       200:
+ *         description: The response details
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *             payload:
+ *               type: string
+ *               description: Data result
+ *           example: {
+ *   "success": true,
+ *   "payload": {
+ *      "to": "+84326152565",
+ *      "status": "approved"
+ *   }
+ * }
+ *       401:
+ *         description: Not permission
+ *       404:
+ *         description: Dat not found
+ *       422:
+ *         description: Unprocessable Entity, the data is not valid
+ *       500:
+ *         description: When got server exception
+ * */    
+router.route('/user/verifyPhoneNum')
+    .get(
+        userValidation.verifyPhoneNum,
+        userController.verifyPhoneNum
+    );
 
 
 export default router;

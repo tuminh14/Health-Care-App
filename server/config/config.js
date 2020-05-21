@@ -12,7 +12,7 @@ const config = {
     serverHost: process.env.SERVER_HOST || 'localhost',
     serverPort,
     //jwt
-    jwtSecret: 'abc',
+    jwtSecret: process.env.JWT_SECRET || '',
     //rabbitmq
     rabbitMQ: {
         url: process.env.RABBIT_URL || 'amqp://localhost'
@@ -22,6 +22,11 @@ const config = {
         origin: process.env.SERVER_ORIGIN || '*',
         methods: 'GET,PUT,POST,DELETE',
         allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,Accept-Language',
+    },
+    twilio: {
+        serviceID: process.env.SERVICE_ID || '',
+        accountSID: process.env.ACCOUNT_SID|| '',
+        authToken: process.env.AUTH_TOKEN || ''
     }
 };
  export default config;

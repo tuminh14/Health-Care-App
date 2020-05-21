@@ -3,6 +3,7 @@ import userModel from '../models/users.model';
 import hashPassword from '../util/helper/hashPassword';
 import JWT from '../util/jwt';
 import config from '../config/config';
+import twilio from 'twilio';
 
 export async function registry(user) {
     const data = {
@@ -17,12 +18,14 @@ export async function registry(user) {
         height: user.height
     }
     try {
-        let existUser = await userModel.findOne({ $or: [
-                                                        { email: data.email.toString() },
-                                                        { phoneNumber: data.phoneNumber.toString()}
-                                                    ]});
+        let existUser = await userModel.findOne({
+            $or: [
+                { email: data.email.toString() },
+                { phoneNumber: data.phoneNumber.toString() }
+            ]
+        });
         if (existUser) {
-            return Promise.reject({status: 403, error: 'email/phone number already created.'});
+            return Promise.reject({ status: 403, error: 'email/phone number already created.' });
         }
 
         data.passWord = await hashPassword.hash(user.passWord);
@@ -43,7 +46,7 @@ export async function registry(user) {
         return Promise.reject(
             {
                 status: error.status || 500,
-                error: error.message || error.errors||'Server Internal Error'
+                error: error.message || error.errors || 'Server Internal Error'
             }
         )
     }
@@ -55,33 +58,32 @@ export async function login(user) {
         passWord: user.passWord
     }
     try {
-        let existUser = await userModel.findOne({ email: data.email.toString()});
+        let existUser = await userModel.findOne({ email: data.email.toString() });
 
         if (!existUser) {
-            return Promise.reject({status: 403, error: 'Incorrect email/password.'});
+            return Promise.reject({ status: 403, error: 'Incorrect email/password.' });
         }
 
         let result = await hashPassword.compare(data.passWord, existUser.passWord);
-        if (result)
-        {
+        if (result) {
             if (existUser.activeMail === globalConstants.activate.ACTIVATED) {
-                await userModel.updateOne( {
+                await userModel.updateOne({
                     _id: existUser._id
                 }, {
                     $set: {
                         online: true
                     }
                 });
-                let token = await JWT.issue({_id: existUser._id}, config.jwtSecret);
+                let token = await JWT.issue({ _id: existUser._id }, config.jwtSecret);
                 return {
                     user: existUser,
                     token: token
                 }
             }
-            return Promise.reject({status: 403, error: 'Account must be activated.'});
+            return Promise.reject({ status: 403, error: 'Account must be activated.' });
 
         }
-        return Promise.reject({status: 403, error: 'Incorrect email/password.'});
+        return Promise.reject({ status: 403, error: 'Incorrect email/password.' });
 
 
     } catch (error) {
@@ -89,8 +91,115 @@ export async function login(user) {
         return Promise.reject(
             {
                 status: error.status || 500,
-                error: error.message || error.errors||'Server Internal Error'
+                error: error.message || error.errors || 'Server Internal Error'
             }
         )
     }
 }
+
+const twilioClient = twilio(config.twilio.accountSID, config.twilio.authToken);
+
+export async function sendVerifyPhoneNum(user) {
+    const data = {
+        phoneNumber: `${globalConstants.countryCode.VIET_NAM}${user.phoneNumber}`,
+        channel: globalConstants.channel.SMS
+    }
+
+    try {
+        let existUser = await userModel.findOne({ phoneNumber: user.phoneNumber.toString()} );
+
+        if (!existUser) {
+            return Promise.reject({ status: 403, error: 'Incorrect phone number.' });
+        }
+
+        const payload = await twilioClient
+            .verify
+            .services(config.twilio.serviceID)
+            .verifications
+            .create({
+                to: data.phoneNumber,
+                channel: data.channel
+            });
+
+        if (payload.status === globalConstants.twilioVerifyStatus.PENDING ) {
+            userModel.updateOne({
+                _id: existUser._id
+            }, {
+                $set: {
+                    activePhone: globalConstants.activate.PENDING
+                }
+            });
+        }
+
+        return {
+            to: payload.to,
+            status: payload.status
+        }
+    } catch (error) {
+        console.error('error user send verify phone number: ', error);
+        return Promise.reject(
+            {
+                status: error.status || 500,
+                error: error.message || error.errors || 'Server Internal Error'
+            }
+        )
+    }
+}
+
+export async function verifyPhoneNum(user) {
+    const data = {
+        phoneNumber: `${globalConstants.countryCode.VIET_NAM}${user.phoneNumber}`,
+        verifyCode: user.verifyCode,
+        channel: globalConstants.channel.SMS
+    }
+
+    try {
+        let existUser = await userModel.findOne({ phoneNumber: user.phoneNumber.toString()} );
+
+        if (!existUser) {
+            return Promise.reject({ status: 403, error: 'Incorrect phone number.' });
+        }
+
+        const payload = await twilioClient
+            .verify
+            .services(config.twilio.serviceID)
+            .verificationChecks
+            .create({
+                to: data.phoneNumber,
+                code: data.verifyCode
+            });
+
+        if (payload.status === globalConstants.twilioVerifyStatus.PENDING) {
+            return Promise.reject({ status: 401, error: 'Unauthorized' });
+        }
+
+        if (payload.status === globalConstants.twilioVerifyStatus.APPROVED) {
+            userModel.updateOne({
+                _id: existUser._id
+            }, {
+                $set: {
+                    activePhone: globalConstants.activate.ACTIVATED
+                }
+            })
+        }
+
+        return {
+            to: payload.to,
+            status: payload.status
+        }
+
+    } catch (error) {
+        console.error('error user verify phone number: ', error);
+        if (error.status === 404) {
+            error.message = 'Phone number was not requested';
+        }
+        return Promise.reject(
+            {
+                status: error.status || 500,
+                error: error.message || error.errors || 'Server Internal Error'
+            }
+        )
+    }
+}
+
+

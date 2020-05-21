@@ -1,4 +1,4 @@
-import {body, validationResult} from 'express-validator/check';
+import {body, query , validationResult} from 'express-validator';
 import globalConstants from '../config/globalConstants';
 
 const validate = validations => {
@@ -32,8 +32,16 @@ export const registry = validate([
     body('height', 'Invalid height').trim().isNumeric(),
     
 ]);
+
 export const login = validate([
     body('email', 'Invalid email').isEmail(),
     body('passWord', 'password more than 6 digits').trim().isLength({ min: 6 }),
 ]);
-    
+
+export const sendVerifyPhoneNum = validate([
+    query('phoneNumber', 'Invalid phone number').matches(globalConstants.regex.PHONE_NUMBER),
+]);
+export const verifyPhoneNum = validate([
+    query('phoneNumber', 'Invalid phone number').matches(globalConstants.regex.PHONE_NUMBER),
+]);
+

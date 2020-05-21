@@ -18,3 +18,23 @@ export async function login(req, res) {
         return res.RH.error(error);
     }
 }
+
+export async function sendVerifyPhoneNum(req, res) {
+    try {
+        let options = await req.query;
+        let payload = await userService.sendVerifyPhoneNum(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.error(error);
+    }
+}
+
+export async function verifyPhoneNum(req, res) {
+    try {
+        let options = await req.query;
+        let payload = await userService.verifyPhoneNum(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.error(error);
+    }
+}

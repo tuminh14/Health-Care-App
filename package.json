@@ -37,7 +37,8 @@
     "morgan": "^1.10.0",
     "node-gyp": "^6.1.0",
     "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "twilio": "^3.43.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
