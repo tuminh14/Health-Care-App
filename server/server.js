@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
 
-import swaggerSpec from './docs';
+import swaggerSpec from './docs/index';
 import config from "./config/config"
 import * as dummy from "./mongo/dummyData";
 import AMPQ from "../ampq/ampq";
@@ -64,7 +64,7 @@ app.use('/api',[users]);
 
 app.use(errorHandler);
 
-app.listen(config.port, (error) => {
+app.listen(config.serverPort, (error) => {
     if (error) {
         console.error(`Cannot start backend services: `);
         console.error(error);
