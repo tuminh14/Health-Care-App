@@ -33,6 +33,9 @@ const globalConstant = {
   twilioVerifyStatus: {
     PENDING: 'pending',
     APPROVED: 'approved'
+  },
+  jobName: {
+    SEND_OTP_PHONE: 'send_otp_phone',
   }
 
 };

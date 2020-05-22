@@ -4,6 +4,7 @@ import hashPassword from '../util/helper/hashPassword';
 import JWT from '../util/jwt';
 import config from '../config/config';
 import twilio from 'twilio';
+import AMPQ from "../../ampq/ampq";
 
 export async function registry(user) {
     const data = {
@@ -97,43 +98,23 @@ export async function login(user) {
     }
 }
 
-const twilioClient = twilio(config.twilio.accountSID, config.twilio.authToken);
+
 
 export async function sendVerifyPhoneNum(user) {
-    const data = {
-        phoneNumber: `${globalConstants.countryCode.VIET_NAM}${user.phoneNumber}`,
-        channel: globalConstants.channel.SMS
-    }
-
     try {
         let existUser = await userModel.findOne({ phoneNumber: user.phoneNumber.toString()} );
 
         if (!existUser) {
             return Promise.reject({ status: 403, error: 'Incorrect phone number.' });
         }
-
-        const payload = await twilioClient
-            .verify
-            .services(config.twilio.serviceID)
-            .verifications
-            .create({
-                to: data.phoneNumber,
-                channel: data.channel
-            });
-
-        if (payload.status === globalConstants.twilioVerifyStatus.PENDING ) {
-            userModel.updateOne({
-                _id: existUser._id
-            }, {
-                $set: {
-                    activePhone: globalConstants.activate.PENDING
-                }
-            });
+        const data = {
+            existUser: existUser,
+            user: user
         }
-
+        AMPQ.sendDataToRabbit(globalConstants.jobName.SEND_OTP_PHONE,data)
         return {
-            to: payload.to,
-            status: payload.status
+            to: user.phoneNumber,
+            status: globalConstants.twilioVerifyStatus.PENDING
         }
     } catch (error) {
         console.error('error user send verify phone number: ', error);

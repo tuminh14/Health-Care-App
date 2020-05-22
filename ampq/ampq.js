@@ -46,7 +46,7 @@ export default class AMPQ {
            throw Error('Data must be string or object');
         }
         if(typeof data ==='object'){
-            data.JSON.stringify(data);
+            data = JSON.stringify(data);
         }
         try{
             AMPQ.channel.sendToQueue(queueName,Buffer.from(data));
