@@ -265,25 +265,6 @@
 *                       "error": "Incorrect phone number."
 *                   }
 *               } 
-*       429:
-*           description: too many request
-*           schema:
-*               type: object
-*               properties:
-*                   error:
-*                       type: object
-*                       properties:
-*                           status:
-*                               type: int
-*                           error:
-*                               type: string
-*                               description: error messages
-*               example: {
-*                   "error": {
-*                       "status": 429,
-*                       "error": "Max send attempts reached"
-*                   }
-*               } 
 *       422:
 *           description: Unprocessable Entity, the data is not valid
 *           schema:

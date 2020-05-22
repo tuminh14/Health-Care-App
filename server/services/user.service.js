@@ -140,7 +140,7 @@ export async function verifyPhoneNum(user) {
         if (!existUser) {
             return Promise.reject({ status: 403, error: 'Incorrect phone number.' });
         }
-
+        const twilioClient = await twilio(config.twilio.accountSID, config.twilio.authToken);
         const payload = await twilioClient
             .verify
             .services(config.twilio.serviceID)
