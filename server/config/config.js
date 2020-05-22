@@ -1,17 +1,19 @@
 const serverPort = process.env.PORT || 3001; // The port server will running
+const serverHost = process.env.SERVER_HOST || 'localhost';
 const dbHost = process.env.MONGO_HOST||'localhost';
 const databaseName = process.env.MONGO_DATABASE_NAME||'health-care-app';
 const dbPort = process.env.MONGO_PORT||27017;
 const dbUser = process.env.USER_ADMIN||"admin";
 const dbPassword = process.env.PASS_ADMIN||"admin";
+const domainName = process.env.DOMAIN_NAME || `${serverHost}:${serverPort}`;
 const config = {
     mongoURL: process.env.MONGO_URL || `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${databaseName}`,
     dbPort,
     databaseName,
-    serverHost: process.env.SERVER_HOST || 'localhost',
+    serverHost,
     serverPort,
-//domain
-domainName: process.env.DOMAIN_NAME || `${serverHost}:${serverPort}`,
+    //domain
+    domainName,
     //jwt
     jwtSecret: process.env.JWT_SECRET || '',
     //rabbitmq
