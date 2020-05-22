@@ -10,6 +10,8 @@ const config = {
     databaseName,
     serverHost: process.env.SERVER_HOST || 'localhost',
     serverPort,
+//domain
+domainName: process.env.DOMAIN_NAME || `${serverHost}:${serverPort}`,
     //jwt
     jwtSecret: process.env.JWT_SECRET || '',
     //rabbitmq
