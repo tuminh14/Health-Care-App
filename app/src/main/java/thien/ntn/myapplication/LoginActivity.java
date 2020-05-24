@@ -25,6 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +40,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText editEmail, editPassword;
     Button btnSignIn, btnRegister;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    String strFileName = "FileName.txt";
+    String strFileGender = "FileGender.txt";
+    String strFileWeight = "FileWeight.txt";
+    String strFileHeight = "FileHeight.txt";
+    String strFilePhoneNumber = "FilePhoneNumber.txt";
+    String strFileBirthDay = "FileBirthDay.txt";
+    String strFileEmail = "FileEmail.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +120,24 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister=(Button)findViewById(R.id.btn_register);
     }
 
+    public void writeFile(String strText, String strFileInfo) {
+        String textToSave = "text to save";
+
+
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(strFileInfo, MODE_PRIVATE);
+            fileOutputStream.write(strText.getBytes());
+            fileOutputStream.close();
+
+            Toast.makeText(getApplicationContext(), "Text Saved", Toast.LENGTH_SHORT).show();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void postData() {
         RequestQueue requestQueue=Volley.newRequestQueue(LoginActivity.this);
         String url="http://165.22.107.58/api/user/login";
@@ -120,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
             object.put("email",editEmail.getText().toString());
             object.put("passWord",editPassword.getText().toString());
 
-//            object.put("email","thien");
+//            object.put("email","a@gmail.com");
 //            object.put("passWord","121212");
 
         } catch (JSONException e) {
@@ -131,13 +160,25 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String statusSuccess = new String(); // Trạng thái khi invalid input
-                            statusSuccess = response.getString("success");
+                            JSONObject jsonObjectPayload = response.getJSONObject("payload");
+                            JSONObject jsonObjectUser = jsonObjectPayload.getJSONObject("user");
 
-//                            test = statusSuccess;
-//                            Toast.makeText(RegisterActivity.this, "String Response : " + statusSuccess, Toast.LENGTH_SHORT).show();
+                            String fullName = jsonObjectUser.getString("fullName");
+                            String gender = jsonObjectUser.getString("gender");
+                            String email = jsonObjectUser.getString("email");
+                            String phoneNumber = jsonObjectUser.getString("phoneNumber");
+                            String birthDay = jsonObjectUser.getString("birthDay");
+                            String weight = jsonObjectUser.getString("weight");
+                            String height = jsonObjectUser.getString("height");
 
-                            Toast.makeText(LoginActivity.this, "Status: " + statusSuccess, Toast.LENGTH_SHORT).show();
+                            writeFile(fullName, strFileName);
+                            writeFile(gender, strFileGender);
+                            writeFile(email, strFileEmail);
+                            writeFile(phoneNumber, strFilePhoneNumber);
+                            writeFile(birthDay, strFileBirthDay);
+                            writeFile(weight, strFileWeight);
+                            writeFile(height, strFileHeight);
+
                             Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(sub1);
                         } catch (JSONException e) {
