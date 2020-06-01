@@ -14,6 +14,7 @@ const globalConstant = {
     PENDING: 2
   },
   tokenLife: {
+    ONE_MINUTE: 60,
     ONE_HOUR : 3600,
     ONE_DAY : 3600 * 24,
     ONE_MONTH : 3600 * 24 * 30,
@@ -21,7 +22,8 @@ const globalConstant = {
   },
   regex: {
     PHONE_NUMBER: /^0[0-9]{9}/,
-    FULL_NAME: /[\b]*[A-Za-z]+[\b]*/
+    FULL_NAME: /[\b]*[A-Za-z]+[\b]*/,
+    EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   },
   channel: {
     SMS: 'sms',
@@ -36,6 +38,11 @@ const globalConstant = {
   },
   jobName: {
     SEND_OTP_PHONE: 'send_otp_phone',
+    SEND_EMAIL: 'send_email'
+  },
+  mail: {
+    USER: process.env.MAIL_USER || '',
+    PASSWORD: process.env.MAIL_PASSWORD || ''
   }
 
 };

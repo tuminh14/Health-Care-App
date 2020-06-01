@@ -30,6 +30,10 @@ const config = {
         serviceID: process.env.SERVICE_ID || '',
         accountSID: process.env.ACCOUNT_SID|| '',
         authToken: process.env.AUTH_TOKEN || ''
+    },
+    mail: {
+        USER: process.env.MAIL_USER || "",
+        PASSWORD: process.env.MAIL_PASSWORD || ""
     }
 };
  export default config;
