@@ -30,5 +30,10 @@ router.route('/user/verifyPhoneNum')
         userController.verifyPhoneNum
     );
 
+router.route('/user/sendVerifyEmail')
+    .get(
+        userValidation.sendverifyMail,
+        userController.sendVerifyEmail
+    )
 
 export default router;

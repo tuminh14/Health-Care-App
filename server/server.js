@@ -69,7 +69,7 @@ app.listen(config.serverPort, (error) => {
         console.error(`Cannot start backend services: `);
         console.error(error);
     } else {
-        console.log(`Backend service is running on port: ${config.port}`);
+        console.log(`Backend service is running on port: ${config.serverPort}`);
     }
 });
 

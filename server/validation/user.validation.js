@@ -10,7 +10,7 @@ const validate = validations => {
             next();
         } else {
             res.status(422);
-            
+
             let msgErrors = {};
             errors.array().forEach(error => {
                 msgErrors[error.param] = error.msg;
@@ -30,7 +30,7 @@ export const registry = validate([
     body('fullName', 'Invalid full name').trim().isLength({ min: 2, max: 100 }).matches(globalConstants.regex.FULL_NAME),
     body('weight', 'Invalid weight').trim().isNumeric(),
     body('height', 'Invalid height').trim().isNumeric(),
-    
+
 ]);
 
 export const login = validate([
@@ -43,5 +43,9 @@ export const sendVerifyPhoneNum = validate([
 ]);
 export const verifyPhoneNum = validate([
     query('phoneNumber', 'Invalid phone number').matches(globalConstants.regex.PHONE_NUMBER),
+]);
+
+export const sendverifyMail = validate([
+    query('email', 'Invalid email').matches(globalConstants.regex.EMAIL),
 ]);
 

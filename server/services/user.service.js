@@ -5,9 +5,10 @@ import JWT from '../util/jwt';
 import config from '../config/config';
 import twilio from 'twilio';
 import AMPQ from "../../ampq/ampq";
-
+import cuid from 'cuid';
 export async function registry(user) {
     const data = {
+        cuid: cuid(),
         email: user.email,
         fullName: user.fullName,
         phoneNumber: user.phoneNumber,
@@ -97,8 +98,6 @@ export async function login(user) {
         )
     }
 }
-
-
 
 export async function sendVerifyPhoneNum(user) {
     try {
@@ -193,4 +192,37 @@ export async function verifyPhoneNum(user) {
     }
 }
 
+export async function sendVerifyEmail(user){
+    try{
+        let existUser = await userModel.findOne({email: user.email});
+        if(existUser) {
+            if(existUser.activeMail === globalConstants.activate.ACTIVATED)
+            {
+                return Promise.reject({status: 403, error: 'Account already activated'})
+            }
+            let token = await JWT.issueEmail({ email: user.email, cuid: existUser.cuid, fullName: existUser.fullName }, config.jwtSecret);
+            const data = {
+                email: user.email,
+                fullName: existUser.fullName,
+                cuid: existUser.cuid,
+                token: token
+            }
+            AMPQ.sendDataToRabbit(globalConstants.jobName.SEND_EMAIL,data);
+            return {
+                fullName: existUser.fullName,
+                email: user.email
+            }
+        }
+        return Promise.reject({ status: 403, error: 'Incorrect email.' })
+
+    }catch(err){
+        console.error('error user send verify email: ', error);
+        return Promise.reject(
+            {
+                status: error.status || 500,
+                error: error.message || error.errors || 'Server Internal Error'
+            }
+        )
+    }
+}
 

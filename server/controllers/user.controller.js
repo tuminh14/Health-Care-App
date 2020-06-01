@@ -38,3 +38,12 @@ export async function verifyPhoneNum(req, res) {
         return res.RH.error(error);
     }
 }
+export async function sendVerifyEmail(req, res) {
+    try {
+        let options = await req.query;
+        let payload = await userService.sendVerifyEmail(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.error(error);
+    }
+}
