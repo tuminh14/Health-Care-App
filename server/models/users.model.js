@@ -1,6 +1,7 @@
 import mongooge from "mongoose"
 import globalConstant from "../config/globalConstants";
 const UserSchema = mongooge.Schema({
+    cuid: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     fullName: { type: String, required: true },
     passWord: { type: String, required: true },
