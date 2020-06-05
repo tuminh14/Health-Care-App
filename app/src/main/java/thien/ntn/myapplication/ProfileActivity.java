@@ -1,5 +1,7 @@
 package thien.ntn.myapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,20 +47,32 @@ public class ProfileActivity extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AnhXa();
-        String strName = readFile(strFileName);
-        txtName.setText(strName);
-        String strGender = readFile(strFileGender);
-        txtGender.setText(strGender);
-        String strWeight = readFile(strFileWeight);
-        txtWeight.setText(strWeight);
-        String strHeight = readFile(strFileHeight);
-        txtHeight.setText(strHeight);
-        String strPhoneNumber = readFile(strFilePhoneNumber);
-        txtPhoneNumber.setText(strPhoneNumber);
-        String strBirthDay = readFile(strFileBirthDay);
-        txtBirthDay.setText(strBirthDay);
-        String strEmail = readFile(strFileEmail);
-        txtEmail.setText(strEmail);
+//        String strName = readFile(strFileName);
+//        txtName.setText(strName);
+//        String strGender = readFile(strFileGender);
+//        txtGender.setText(strGender);
+//        String strWeight = readFile(strFileWeight);
+//        txtWeight.setText(strWeight);
+//        String strHeight = readFile(strFileHeight);
+//        txtHeight.setText(strHeight);
+//        String strPhoneNumber = readFile(strFilePhoneNumber);
+//        txtPhoneNumber.setText(strPhoneNumber);
+//        String strBirthDay = readFile(strFileBirthDay);
+//        txtBirthDay.setText(strBirthDay);
+//        String strEmail = readFile(strFileEmail);
+//        txtEmail.setText(strEmail);
+
+        //Nhận từ MainActivity
+        SharedPreferences sp = this.getActivity().getSharedPreferences("Save", Context.MODE_PRIVATE);
+        //Đọc dữ liệu
+        txtName.setText(sp.getString("fullName", null));
+        txtGender.setText(sp.getString("gender", null));
+        txtEmail.setText(sp.getString("email", null));
+        txtPhoneNumber.setText(sp.getString("phoneNumber", null));
+        txtBirthDay.setText(sp.getString("birthDay", null));
+        txtWeight.setText(sp.getString("weight", null));
+        txtHeight.setText(sp.getString("height", null));
+
     }
 
     public void AnhXa(){

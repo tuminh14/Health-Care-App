@@ -3,12 +3,14 @@ package thien.ntn.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,18 +61,24 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
-                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
-                    } else if(editPassword.getText().toString().trim().length() < 6){
-                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
-                    } else {
-                        postData();
-                    }
-                }
+                postData();
+                SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
+                //Đọc dữ liệu
+
+                String ssss = sp.getString("fullName", null);
+                Toast.makeText(LoginActivity.this, "aa + " + ssss, Toast.LENGTH_SHORT).show();
+//                if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
+//                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
+//                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
+//                    } else if(editPassword.getText().toString().trim().length() < 6){
+//                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        postData();
+//                    }
+//                }
             }
         });
 
@@ -146,11 +154,11 @@ public class LoginActivity extends AppCompatActivity {
         try {
             //input your API parameters
 
-            object.put("email",editEmail.getText().toString());
-            object.put("passWord",editPassword.getText().toString());
+//            object.put("email",editEmail.getText().toString());
+//            object.put("passWord",editPassword.getText().toString());
 
-//            object.put("email","a@gmail.com");
-//            object.put("passWord","121212");
+            object.put("email","duongtrantuminh14@gmail.com");
+            object.put("passWord","adminroot");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -171,13 +179,27 @@ public class LoginActivity extends AppCompatActivity {
                             String weight = jsonObjectUser.getString("weight");
                             String height = jsonObjectUser.getString("height");
 
-                            writeFile(fullName, strFileName);
-                            writeFile(gender, strFileGender);
-                            writeFile(email, strFileEmail);
-                            writeFile(phoneNumber, strFilePhoneNumber);
-                            writeFile(birthDay, strFileBirthDay);
-                            writeFile(weight, strFileWeight);
-                            writeFile(height, strFileHeight);
+                            SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.clear();
+                            //Lưu dữ liệu
+                            editor.putString("fullName", fullName);
+                            editor.putString("gender", gender);
+                            editor.putString("email", email);
+                            editor.putString("phoneNumber", phoneNumber);
+                            editor.putString("birthDay", birthDay);
+                            editor.putString("weight", weight);
+                            editor.putString("height", height);
+                            //Hoàn thành
+                            editor.commit();
+
+//                            writeFile(fullName, strFileName);
+//                            writeFile(gender, strFileGender);
+//                            writeFile(email, strFileEmail);
+//                            writeFile(phoneNumber, strFilePhoneNumber);
+//                            writeFile(birthDay, strFileBirthDay);
+//                            writeFile(weight, strFileWeight);
+//                            writeFile(height, strFileHeight);
 
                             Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(sub1);
