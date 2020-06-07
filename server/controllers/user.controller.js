@@ -6,7 +6,7 @@ export async function registry(req, res) {
         let payload = await userService.registry(options);
         res.RH.success(payload);
     } catch (error) {
-        return res.RH.error(error);
+        return res.RH.successError(error);
     }
 }
 export async function login(req, res) {
@@ -15,7 +15,7 @@ export async function login(req, res) {
         let payload = await userService.login(options);
         res.RH.success(payload);
     } catch (error) {
-        return res.RH.error(error);
+        return res.RH.successError(error);
     }
 }
 
@@ -25,7 +25,7 @@ export async function sendVerifyPhoneNum(req, res) {
         let payload = await userService.sendVerifyPhoneNum(options);
         res.RH.success(payload);
     } catch (error) {
-        return res.RH.error(error);
+        return res.RH.successError(error);
     }
 }
 
@@ -35,6 +35,6 @@ export async function verifyPhoneNum(req, res) {
         let payload = await userService.verifyPhoneNum(options);
         res.RH.success(payload);
     } catch (error) {
-        return res.RH.error(error);
+        return res.RH.successError(error);
     }
 }
