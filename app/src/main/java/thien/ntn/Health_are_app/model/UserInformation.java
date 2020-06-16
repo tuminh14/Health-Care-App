@@ -1,4 +1,4 @@
-package model;
+package thien.ntn.Health_are_app.model;
 
 public class UserInformation {
     private String name;

@@ -1,4 +1,4 @@
-package thien.ntn.myapplication;
+package thien.ntn.Health_are_app.activity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -8,19 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
-import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+
+import thien.ntn.myapplication.R;
 
 import  static thien.ntn.myapplication.R.layout.activity_search_fragment;
 

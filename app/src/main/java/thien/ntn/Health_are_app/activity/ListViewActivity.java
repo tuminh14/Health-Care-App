@@ -1,11 +1,12 @@
-package thien.ntn.myapplication;
+package thien.ntn.Health_are_app.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ListView;
 
-import myadapter.ListViewAdapter;
+import thien.ntn.Health_are_app.adapter.ListViewAdapter;
+import thien.ntn.myapplication.R;
 
 public class ListViewActivity extends AppCompatActivity {
 

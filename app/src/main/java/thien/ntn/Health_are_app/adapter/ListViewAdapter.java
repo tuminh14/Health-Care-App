@@ -1,4 +1,4 @@
-package myadapter;
+package thien.ntn.Health_are_app.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
