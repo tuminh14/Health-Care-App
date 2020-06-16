@@ -21,11 +21,11 @@
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".Main2Activity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".ListViewActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".SearchFragmentActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

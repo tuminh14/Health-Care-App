@@ -61,24 +61,23 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postData();
-                SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
-                //Đọc dữ liệu
 
-                String ssss = sp.getString("fullName", null);
-                Toast.makeText(LoginActivity.this, "aa + " + ssss, Toast.LENGTH_SHORT).show();
-//                if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
-//                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-//                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
-//                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
-//                    } else if(editPassword.getText().toString().trim().length() < 6){
-//                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        postData();
-//                    }
-//                }
+                if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    postData();
+                    SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
+                    //Đọc dữ liệu
+                    String resIsSuccess = sp.getString("success", null);
+                    if (resIsSuccess.equals("false")){
+                        Toast.makeText(getApplicationContext(),"Email hoặc mật khẩu không hợp lệ",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_SHORT).show();
+                        Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(sub1);
+                    }
+                }
             }
         });
 
@@ -91,35 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public static boolean isNumeric(String str) {
-        return str.matches("[-+]?\\d*\\.?\\d+");
-    }
-
-    public static boolean validateJavaDate(String strDate)
-    {
-        /*
-         * Set preferred date format,
-         * For example MM-dd-yyyy, MM.dd.yyyy,dd.MM.yyyy etc.*/
-        SimpleDateFormat sdfrmt = new SimpleDateFormat("yyyy-MM-dd");
-        sdfrmt.setLenient(false);
-        /* Create Date object
-         * parse the string into date
-         */
-        try
-        {
-            Date javaDate = sdfrmt.parse(strDate);
-            System.out.println(strDate+" is valid date format");
-        }
-        /* Date format is invalid */
-        catch (ParseException e)
-        {
-            System.out.println(strDate+" is Invalid Date format");
-            return false;
-        }
-        /* Return true if date format is valid */
-        return true;
-    }
-
     public void AnhXa(){
         editEmail=(EditText)findViewById(R.id.edit_text_email);
         editPassword=(EditText)findViewById(R.id.edit_text_password);
@@ -128,37 +98,17 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister=(Button)findViewById(R.id.btn_register);
     }
 
-    public void writeFile(String strText, String strFileInfo) {
-        String textToSave = "text to save";
-
-
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(strFileInfo, MODE_PRIVATE);
-            fileOutputStream.write(strText.getBytes());
-            fileOutputStream.close();
-
-            Toast.makeText(getApplicationContext(), "Text Saved", Toast.LENGTH_SHORT).show();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void postData() {
         RequestQueue requestQueue=Volley.newRequestQueue(LoginActivity.this);
         String url="http://165.22.107.58/api/user/login";
 //        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
         try {
-            //input your API parameters
+            object.put("email",editEmail.getText().toString());
+            object.put("passWord",editPassword.getText().toString());
 
-//            object.put("email",editEmail.getText().toString());
-//            object.put("passWord",editPassword.getText().toString());
-
-            object.put("email","duongtrantuminh14@gmail.com");
-            object.put("passWord","adminroot");
+//            object.put("email","duongtrantuminh14@gmail.com");
+//            object.put("passWord","adminroot");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -171,6 +121,11 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jsonObjectPayload = response.getJSONObject("payload");
                             JSONObject jsonObjectUser = jsonObjectPayload.getJSONObject("user");
 
+                            // Luu thong tin check dang nhap
+                            Boolean isSuccess = response.getBoolean("success");
+                            String strIsSuccess = String.valueOf(isSuccess);
+
+                            // Luu thong tin hien thi profile
                             String fullName = jsonObjectUser.getString("fullName");
                             String gender = jsonObjectUser.getString("gender");
                             String email = jsonObjectUser.getString("email");
@@ -190,6 +145,8 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("birthDay", birthDay);
                             editor.putString("weight", weight);
                             editor.putString("height", height);
+
+                            editor.putString("success", strIsSuccess);
                             //Hoàn thành
                             editor.commit();
 
@@ -201,8 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 //                            writeFile(weight, strFileWeight);
 //                            writeFile(height, strFileHeight);
 
-                            Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(sub1);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

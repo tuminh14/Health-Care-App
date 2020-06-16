@@ -57,39 +57,33 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                                       postData();
 
-//                if (editName.getText().toString().isEmpty() || editGender.getText().toString().isEmpty() ||
-//                        editWeight.getText().toString().isEmpty() || editHeight.getText().toString().isEmpty() ||
-//                        editPhoneNumber.getText().toString().isEmpty() || editBirthDay.getText().toString().isEmpty() ||
-//                        editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()
-//                ){
-//                    Toast.makeText(RegisterActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-////                     postData();
-////                    new TestAsyncTask().execute();
-////                    Toast.makeText(RegisterActivity.this, "test = " + test, Toast.LENGTH_SHORT).show();
-//
-//                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
-//                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
-//                    } else if (!validateJavaDate(editBirthDay.getText().toString().trim())){
-//                        Toast.makeText(getApplicationContext(),"Ngày sinh không hợp lệ",Toast.LENGTH_SHORT).show();
-//                    } else if(editPassword.getText().toString().trim().length() < 6){
-//                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
-//                    } else if (editName.getText().toString().trim().length() < 2 ||
-//                            editName.getText().toString().trim().length() > 100) {
-//                        Toast.makeText(getApplicationContext(),"Tên nhiều hơn 2 ký tự và ít hơn 100 ký tự",Toast.LENGTH_SHORT).show();
-//                    } else if (isNumeric(editWeight.getText().toString().trim()) == false){
-//                        Toast.makeText(getApplicationContext(),"Cân nặng phải là số",Toast.LENGTH_SHORT).show();
-//                    } else if (isNumeric(editHeight.getText().toString().trim()) == false){
-//                        Toast.makeText(getApplicationContext(),"Chiều cao phải là số",Toast.LENGTH_SHORT).show();
-//                    }
-//                    else {
-//                        postData();
-//
-//                    }
-//                }
+                if (editName.getText().toString().isEmpty() || editGender.getText().toString().isEmpty() ||
+                        editWeight.getText().toString().isEmpty() || editHeight.getText().toString().isEmpty() ||
+                        editPhoneNumber.getText().toString().isEmpty() || editBirthDay.getText().toString().isEmpty() ||
+                        editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()
+                ){
+                    Toast.makeText(RegisterActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
+                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
+                    } else if (!validateJavaDate(editBirthDay.getText().toString().trim())){
+                        Toast.makeText(getApplicationContext(),"Ngày sinh không hợp lệ",Toast.LENGTH_SHORT).show();
+                    } else if(editPassword.getText().toString().trim().length() < 6){
+                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
+                    } else if (editName.getText().toString().trim().length() < 2 ||
+                            editName.getText().toString().trim().length() > 100) {
+                        Toast.makeText(getApplicationContext(),"Tên nhiều hơn 2 ký tự và ít hơn 100 ký tự",Toast.LENGTH_SHORT).show();
+                    } else if (isNumeric(editWeight.getText().toString().trim()) == false){
+                        Toast.makeText(getApplicationContext(),"Cân nặng phải là số",Toast.LENGTH_SHORT).show();
+                    } else if (isNumeric(editHeight.getText().toString().trim()) == false){
+                        Toast.makeText(getApplicationContext(),"Chiều cao phải là số",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        postData();
+                    }
+                }
             }
         });
     }
@@ -144,23 +138,23 @@ public class RegisterActivity extends AppCompatActivity {
         JSONObject object = new JSONObject();
         try {
             //input your API parameters
-//            object.put("email",editEmail.getText().toString());
-//            object.put("passWord",editPassword.getText().toString());
-//            object.put("phoneNumber",editPhoneNumber.getText().toString());
-//            object.put("fullName",editName.getText().toString());
-//            object.put("gender",editGender.getText().toString());
-//            object.put("weight",editWeight.getText().toString());
-//            object.put("height",editHeight.getText().toString());
-//            object.put("birthDay",editBirthDay.getText().toString());
+            object.put("email",editEmail.getText().toString());
+            object.put("passWord",editPassword.getText().toString());
+            object.put("phoneNumber",editPhoneNumber.getText().toString());
+            object.put("fullName",editName.getText().toString());
+            object.put("gender",editGender.getText().toString());
+            object.put("weight",editWeight.getText().toString());
+            object.put("height",editHeight.getText().toString());
+            object.put("birthDay",editBirthDay.getText().toString());
 
-            object.put("email","thiengmail.com");
-            object.put("passWord","121212");
-            object.put("phoneNumber","0918290203");
-            object.put("fullName","Thien");
-            object.put("gender","Nam");
-            object.put("weight","12");
-            object.put("height","12");
-            object.put("birthDay","2020-02-02");
+//            object.put("email","thiengmail.com");
+//            object.put("passWord","121212");
+//            object.put("phoneNumber","0918290203");
+//            object.put("fullName","Thien");
+//            object.put("gender","Nam");
+//            object.put("weight","12");
+//            object.put("height","12");
+//            object.put("birthDay","2020-02-02");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -171,25 +165,17 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 //                            JSONObject jsonObj = response.getJSONObject("payload");
-//                            Boolean success = Boolean.valueOf(response.getString("success"));
                             String success = response.getString("success");
                             Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-//                            String statusSuccess = new String(); // Trạng thái khi invalid input
-//                            statusSuccess = jsonObj.getString("gender");
+//
+                            if (success.equals("false")){
+                                Toast.makeText(getApplicationContext(),"Đăng kí không thành công",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),"Đăng kí thành công",Toast.LENGTH_SHORT).show();
+                                Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(sub1);
+                            }
 
-//                            userInformation = new UserInformation(jsonObj.getString("email"), "passWord",
-//                                    jsonObj.getString("phoneNumber"), jsonObj.getString("fullName"),
-//                                    jsonObj.getString("gender"), jsonObj.getString("weight"),
-//                                    jsonObj.getString("height"), jsonObj.getString("birthDay"));
-//                            String user = userInformation.getName();
-
-//                            Toast.makeText(RegisterActivity.this, "String Response : " + user, Toast.LENGTH_SHORT).show();
-//                            Log.d("user: ", user);
-//                            String s = response.getString("success");
-//                            Toast.makeText(RegisterActivity.this, "hi", Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(RegisterActivity.this, s, Toast.LENGTH_SHORT).show();
-//                            Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
-//                            startActivity(sub1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -202,32 +188,4 @@ public class RegisterActivity extends AppCompatActivity {
         });
         requestQueue.add(jsonObjectRequest);
     }
-
-
-
-    private class TestAsyncTask extends AsyncTask<Void, String, String>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            postData();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-    }
-
 }

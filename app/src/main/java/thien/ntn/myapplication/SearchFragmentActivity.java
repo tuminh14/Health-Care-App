@@ -3,68 +3,77 @@ package thien.ntn.myapplication;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
+import android.os.Bundle;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+
+import  static thien.ntn.myapplication.R.layout.activity_search_fragment;
 
 public class SearchFragmentActivity extends Fragment {
+    BarChart barChart;
+
+    public static SearchFragmentActivity newInstance() {
+        SearchFragmentActivity fragment = new SearchFragmentActivity();
+        return fragment;
+    }
+
+    public SearchFragmentActivity() {
+        // Required empty public constructor
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_search_fragment, container, false);
 
+        View view =inflater.inflate(activity_search_fragment, container, false);
+
+        barChart = (BarChart)view.findViewById(R.id.barChart);
+//        BarChart barChart = (BarChart)findViewById(R.id.barChart);
+        // truyền cứng dl cho chart
+        ArrayList<BarEntry> visitors = new ArrayList<>();
+        visitors.add(new BarEntry(2014, 402));
+        visitors.add(new BarEntry(2015, 475));
+        visitors.add(new BarEntry(2016, 508));
+        visitors.add(new BarEntry(2017, 660));
+        visitors.add(new BarEntry(2018, 550));
+        visitors.add(new BarEntry(2019, 630));
+        visitors.add(new BarEntry(2020, 470));
+        // xét màu sắc, kích cỡ chữ
+        BarDataSet barDataSet = new BarDataSet(visitors, "Visitors");
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(16f);
+
+        BarData barData = new BarData(barDataSet);
+
+        barChart.setFitBars(true);
+        barChart.setData(barData);
+        barChart.getDescription().setText("Bar Chart Example");
+        barChart.animateY(2000);
+
+//        return inflater.inflate(R.layout.activity_search_fragment, container, false);
+        return  view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        readFile();
     }
-    public void readFile() {
-        try {
 
-
-//            //reading text from the file
-//            FileInputStream fileIn = getActivity().openFileInput("FragmentFile.txt");
-//            //write text to file
-//            try {
-//                FileOutputStream fileout = getActivity().openFileOutput("FragmentFile.txt", MODE_PRIVATE);
-//                OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-//                outputWriter.write(response.toString());
-//                outputWriter.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }}
-
-
-//            displayText.setText("aa");
-            FileInputStream fileInputStream = getActivity().openFileInput("TutorialFile.txt");
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuffer stringBuffer = new StringBuffer();
-
-            String lines;
-            while ((lines = bufferedReader.readLine()) != null) {
-                stringBuffer.append(lines + "\n");
-            }
-            Toast.makeText(getActivity(), stringBuffer.toString(), Toast.LENGTH_SHORT).show();
-            Log.d("tets: ", stringBuffer.toString());
-//            displayText.setText(stringBuffer.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
 
