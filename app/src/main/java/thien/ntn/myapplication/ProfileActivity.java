@@ -60,21 +60,6 @@ public class ProfileActivity extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AnhXa();
-//        String strName = readFile(strFileName);
-//        txtName.setText(strName);
-//        String strGender = readFile(strFileGender);
-//        txtGender.setText(strGender);
-//        String strWeight = readFile(strFileWeight);
-//        txtWeight.setText(strWeight);
-//        String strHeight = readFile(strFileHeight);
-//        txtHeight.setText(strHeight);
-//        String strPhoneNumber = readFile(strFilePhoneNumber);
-//        txtPhoneNumber.setText(strPhoneNumber);
-//        String strBirthDay = readFile(strFileBirthDay);
-//        txtBirthDay.setText(strBirthDay);
-//        String strEmail = readFile(strFileEmail);
-//        txtEmail.setText(strEmail);
-
         //Nhận từ MainActivity
         SharedPreferences sp = this.getActivity().getSharedPreferences("Save", Context.MODE_PRIVATE);
         //Đọc dữ liệu
@@ -101,10 +86,8 @@ public class ProfileActivity extends Fragment {
     public void postData() {
         RequestQueue requestQueue= Volley.newRequestQueue(getActivity().getApplicationContext());
         String url="http://165.22.107.58/api/user/login";
-//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
         try {
-            //input your API parameters
 
 //            object.put("email",editEmail.getText().toString());
 //            object.put("passWord",editPassword.getText().toString());

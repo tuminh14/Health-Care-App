@@ -101,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
     public void postData() {
         RequestQueue requestQueue=Volley.newRequestQueue(LoginActivity.this);
         String url="http://165.22.107.58/api/user/login";
-//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
         try {
             object.put("email",editEmail.getText().toString());
@@ -149,16 +148,6 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("success", strIsSuccess);
                             //Hoàn thành
                             editor.commit();
-
-//                            writeFile(fullName, strFileName);
-//                            writeFile(gender, strFileGender);
-//                            writeFile(email, strFileEmail);
-//                            writeFile(phoneNumber, strFilePhoneNumber);
-//                            writeFile(birthDay, strFileBirthDay);
-//                            writeFile(weight, strFileWeight);
-//                            writeFile(height, strFileHeight);
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -65,8 +65,6 @@ public class SearchFragmentActivity extends Fragment {
         barChart.setData(barData);
         barChart.getDescription().setText("Bar Chart Example");
         barChart.animateY(2000);
-
-//        return inflater.inflate(R.layout.activity_search_fragment, container, false);
         return  view;
     }
 

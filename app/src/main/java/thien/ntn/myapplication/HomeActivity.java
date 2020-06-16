@@ -33,17 +33,12 @@ public class HomeActivity extends Fragment implements SensorEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_home);
-
-//        textView = (TextView) findViewById(R.id.text_view);
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-//        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         textView = (TextView)view.findViewById(R.id.text_view);
     }
 
@@ -55,7 +50,6 @@ public class HomeActivity extends Fragment implements SensorEventListener {
         if (countSensor != null){
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
         } else {
-//            Toast.makeText(getApplicationContext(), "Count sensor not available", Toast.LENGTH_LONG).show();
             Log.d("Error: ", "err");
         }
     }
@@ -71,7 +65,6 @@ public class HomeActivity extends Fragment implements SensorEventListener {
         if (actiityRunning) {
             textView.setText(String.valueOf(event.values[0]));
         }
-
     }
 
     @Override
