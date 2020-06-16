@@ -9,8 +9,7 @@ const validate = validations => {
         if (errors.isEmpty()) {
             next();
         } else {
-            res.status(422);
-
+            res.status(200);
             let msgErrors = {};
             errors.array().forEach(error => {
                 msgErrors[error.param] = error.msg;
