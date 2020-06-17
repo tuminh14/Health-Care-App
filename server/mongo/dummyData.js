@@ -1,5 +1,6 @@
 import User from '../models/users.model';
 import globalConstant from "../config/globalConstants";
+import cuid from 'cuid'
 
 export async function dummyUser() {
     try {
@@ -9,6 +10,7 @@ export async function dummyUser() {
                 email: "duongtrantuminh14@gmail.com",
                 fullName: "Dương Trần Tử Minh",
                 passWord: "kOp1kpas",
+                cuid: cuid(),
                 phoneNumber: "0943686018",
                 gender: globalConstant.gender.MALE,
                 birthDay: Date.now(),
