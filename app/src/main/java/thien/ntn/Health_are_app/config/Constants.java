@@ -7,5 +7,10 @@ public class Constants {
         String TIMEOUT = "Time out !";
     }
 
-    public static final int REQUEST_TIMEOUT = 10;
+    public static final int REQUEST_TIMEOUT = 60;
+
+    public interface SHARE_PREFERENCES_NAME {
+        String LOGIN_PROFILE = "LOGIN_PROFILE";
+        String LOGIN_PHONE_NUMBER_VERIFY = "LOGIN_PHONE_NUMBER_VERIFY";
+    }
 }

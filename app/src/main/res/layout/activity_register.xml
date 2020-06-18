@@ -83,7 +83,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_weight" />
         <EditText
-            android:id="@+id/edit_text_phoneNumber"
+            android:id="@+id/edit_text_verify_code"
             android:layout_width="288dp"
             android:layout_height="50dp"
             android:layout_marginStart="48dp"
@@ -109,7 +109,7 @@
             android:paddingTop="10dp"
             android:textColorHint="#87ffffff"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_phoneNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_verify_code" />
 
         <EditText
             android:id="@+id/edit_text_email"

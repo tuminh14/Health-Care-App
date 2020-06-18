@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="thien.ntn.Health_are_app.activity.LoginActivity"
+    android:background="@drawable/bgsign">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_view_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="36dp"
+            android:lineSpacingExtra="6dp"
+            android:text="Sign In"
+            android:textColor="#FFF"
+            android:textSize="42sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_phone_number"
+            android:layout_width="178dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="24dp"
+            android:text="+84963358405"
+            android:textColor="#FDE"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_sign_in" />
+
+        <EditText
+            android:id="@+id/edit_text_verify_code"
+            android:layout_width="232dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bginput"
+            android:hint="Verify code"
+            android:inputType="phone"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColorHint="#87ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_phone_number" />
+
+        <ProgressBar
+            android:layout_width="163dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintStart_toStartOf="@+id/btn_continue"
+            app:layout_constraintTop_toTopOf="@+id/btn_continue" />
+
+        <Button
+            android:id="@+id/btn_continue"
+            android:layout_width="168dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bgbtn"
+            android:text="Continue"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.511"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_verify_code" />
+
+        <Button
+            android:id="@+id/btn_skip"
+            android:layout_width="81dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/cardview_shadow_end_color"
+            android:text="skip"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.511"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_continue" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

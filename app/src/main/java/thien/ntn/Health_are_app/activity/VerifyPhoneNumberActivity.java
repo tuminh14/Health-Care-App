@@ -6,13 +6,14 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -20,91 +21,71 @@ import org.json.JSONObject;
 
 import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.Health_are_app.worker.LoginWorker;
+import thien.ntn.Health_are_app.worker.VerifyPhoneNumberWorker;
 import thien.ntn.myapplication.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class VerifyPhoneNumberActivity extends AppCompatActivity {
 
-    EditText editEmail, editPassword;
-    Button btnSignIn, btnRegister;
-    Button btnPhoneNumber;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-    String strFileName = "FileName.txt";
-    String strFileGender = "FileGender.txt";
-    String strFileWeight = "FileWeight.txt";
-    String strFileHeight = "FileHeight.txt";
-    String strFilePhoneNumber = "FilePhoneNumber.txt";
-    String strFileBirthDay = "FileBirthDay.txt";
-    String strFileEmail = "FileEmail.txt";
-
+    EditText editVerifyCode;
+    TextView textViewPhoneNumber;
+    Button btnContinue, btnSkip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_verify_phone_number);
         getSupportActionBar().hide();
         AnhXa();
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        SharedPreferences sp = getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.LOGIN_PHONE_NUMBER_VERIFY, Context.MODE_PRIVATE);
+        //Đọc dữ liệu
+        String phoneNumber = sp.getString("phoneNumber", "");
+        textViewPhoneNumber.setText(phoneNumber);
+
+        btnContinue.setOnClickListener(view -> {
+            if (editVerifyCode.getText().toString().isEmpty() ) {
+                Toast.makeText(VerifyPhoneNumberActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                try {
+                    postData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
                 }
-                else {
-
-                    try {
-                        postData();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sub1 = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(sub1);
-            }
-        });
-        btnPhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sub1 = new Intent(LoginActivity.this, LoginPhoneNumberActivity.class);
-                startActivity(sub1);
-            }
-        });
-    }
 
-    private void setShowButton() {
-        btnSignIn.setVisibility(View.VISIBLE);
-        btnSignIn.setEnabled(true);
-    }
-
-    private void setHideButton() {
-        btnSignIn.setEnabled(false);
-        btnSignIn.setVisibility(View.INVISIBLE);
+        btnSkip.setOnClickListener(view -> {
+            Intent sub1 = new Intent(VerifyPhoneNumberActivity.this, LoginPhoneNumberActivity.class);
+            startActivity(sub1);
+        });
     }
 
     public void AnhXa(){
-        editEmail=(EditText)findViewById(R.id.edit_text_email);
-        editPassword=(EditText)findViewById(R.id.edit_text_password);
+        editVerifyCode=(EditText)findViewById(R.id.edit_text_verify_code);
+        textViewPhoneNumber = (TextView)findViewById(R.id.textView_phone_number);
+        btnContinue=(Button)findViewById(R.id.btn_continue);
+        btnSkip=(Button)findViewById(R.id.btn_skip);
+    }
+    private void setShowButton() {
+        btnContinue.setVisibility(View.VISIBLE);
+        btnContinue.setEnabled(true);
+    }
 
-        btnSignIn=(Button)findViewById(R.id.btn_sign_in);
-        btnRegister=(Button)findViewById(R.id.btn_resend);
-        btnPhoneNumber = (Button)findViewById(R.id.btn_phone_number);
+    private void setHideButton() {
+        btnContinue.setEnabled(false);
+        btnContinue.setVisibility(View.INVISIBLE);
     }
 
     private void postData() throws JSONException {
         setHideButton();
         JSONObject requestJson = new JSONObject();
         try {
-            String email =editEmail.getText().toString();
-            String password = editPassword.getText().toString();
+            String verifyCode = editVerifyCode.getText().toString();
+            String phoneNumber = textViewPhoneNumber.getText().toString();
             requestJson = new JSONObject();
-            requestJson.put("email",email);
-            requestJson.put("passWord",password);
+            requestJson.put("phoneNumber", phoneNumber);
+            requestJson.put("verifyCode", verifyCode);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
@@ -113,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Data requestData = new Data.Builder().putString("request", requestJson.toString()).build();
         // Create worker
-        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(LoginWorker.class)
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(VerifyPhoneNumberWorker.class)
                 .setInputData(requestData)
                 .build();
 
@@ -142,11 +123,11 @@ public class LoginActivity extends AppCompatActivity {
                             // select first validate message error
                             msgError = ListError[1];
                         }
-                        Toast.makeText(LoginActivity.this, msgError, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VerifyPhoneNumberActivity.this, msgError, Toast.LENGTH_SHORT).show();
                         setShowButton();
                     } else {
-                        JSONObject paloadObject = request.getJSONObject("payload");
-                        JSONObject jsonObjectUser = paloadObject.getJSONObject("user");
+                        JSONObject payloadObject = request.getJSONObject("payload");
+                        JSONObject jsonObjectUser = payloadObject.getJSONObject("user");
                         // Luu thong tin hien thi profile
                         String strIsSuccess = String.valueOf(isSuccess);
                         String fullName = jsonObjectUser.getString("fullName");
@@ -173,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                         //Hoàn thành
                         editor.commit();
                         Toast.makeText(getApplicationContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent sub1 = new Intent(VerifyPhoneNumberActivity.this, MainActivity.class);
                         startActivity(sub1);
                         setShowButton();
                     }
@@ -182,12 +163,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (workStatus.getState() == WorkInfo.State.FAILED) {
                         Data data = workStatus.getOutputData();
                         String msgError = data.getString("result");
-                        Toast.makeText(LoginActivity.this, msgError, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VerifyPhoneNumberActivity.this, msgError, Toast.LENGTH_SHORT).show();
                         setShowButton();
                     }
                 }
             } catch (JSONException e) {
-                Toast.makeText(LoginActivity.this, Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerifyPhoneNumberActivity.this, Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
                 setShowButton();
             }
 
