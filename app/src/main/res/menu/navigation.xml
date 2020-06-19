@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_shopping_cart_white_24dp"
         android:title="@string/title_cart" />
 
+    <item
+        android:id="@+id/nav_test"
+        android:icon="@drawable/ic_shopping_cart_white_24dp"
+        android:title="@string/title_cart" />
+
 </menu>

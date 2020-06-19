@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -64,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
             this.finish();
         }
         switch (id){
-            case R.id.action_help:
-                Toast.makeText(getApplicationContext(), "Action help", Toast.LENGTH_SHORT).show();
+            case R.id.action_exit:
+                Intent intentExit = new Intent(Intent.ACTION_MAIN);
+                intentExit.addCategory(Intent.CATEGORY_HOME);
+                intentExit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intentExit);
                 return true;
 //            case R.id.action_help:
 //                Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
@@ -93,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_search:
                             selectedFragment = new SearchFragmentActivity();
+                            break;
+                        case R.id.nav_test:
+                            selectedFragment = new TestFragmentActivity();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
