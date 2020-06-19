@@ -6,6 +6,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,6 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
         AnhXa();
+
+        SharedPreferences sp = getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.REGISTRY_INFO, Context.MODE_PRIVATE);
+        //Đọc dữ liệu
+        String phoneNumber = sp.getString("email", "");
+        editEmail.setText(phoneNumber);
+        String password = sp.getString("password", "");
+        editPassword.setText(password);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("success", strIsSuccess);
                         //Hoàn thành
                         editor.commit();
-                        Toast.makeText(getApplicationContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), Constants.NOTIFICATION.LOGIN.SUCCESSFUL, Toast.LENGTH_SHORT).show();
                         Intent sub1 = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(sub1);
                         setShowButton();

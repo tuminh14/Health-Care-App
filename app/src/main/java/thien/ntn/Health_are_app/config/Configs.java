@@ -7,5 +7,6 @@ public class Configs {
         String LOGIN = SERVER_URL + "api/user/login";
         String SEND_VERIFY_PHONE_NUMBER = SERVER_URL + "api/user/sendVerifyPhoneNum";
         String VERIFY_PHONE_NUMBER = SERVER_URL + "api/user/verifyPhoneNum";
+        String REGISTRY = SERVER_URL + "api/user/registry";
     }
 }
