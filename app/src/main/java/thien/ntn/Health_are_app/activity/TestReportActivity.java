@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -17,13 +18,18 @@ import thien.ntn.myapplication.R;
 public class TestReportActivity extends AppCompatActivity {
     private TextView txtStepWalked, txtAvgSpeed, txtCaloriesBurnt, txtTime, txtStepsPerMinute;
     boolean actiityRunning;
-//    NumberFormat formatter = new DecimalFormat("#,###");
-//                txtGiaDamPhan.setText(String.valueOf(formatter.format(phiGiaDamPhan)) + "đ");
+
+    private Intent intentMainactivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_report);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        buttonClickListener();
 
         AnhXa();
 
@@ -48,6 +54,20 @@ public class TestReportActivity extends AppCompatActivity {
 
         txtStepsPerMinute.setText(String.format("%.2f",(Double.parseDouble(value[1])/Double.parseDouble(value[3]))));
 
+    }
+
+    private void buttonClickListener() {
+        Button back = (Button) findViewById(R.id.button_back);
+        //Handling back button click
+        //Going back from current StepDetector Activity to Main Activity
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentMainactivity = new Intent(TestReportActivity.this, StepDetectorActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+            }
+        });
     }
 
     @Override

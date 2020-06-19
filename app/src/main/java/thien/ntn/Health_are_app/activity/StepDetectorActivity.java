@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -74,6 +75,9 @@ public class StepDetectorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.step_detector);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         intent = new Intent(this, StepCountingService.class);
 
@@ -189,9 +193,11 @@ public class StepDetectorActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    intentMainactivity = new Intent(StepDetectorActivity.this, HomeStepsCounterActivity.class);
+                    intentMainactivity = new Intent(StepDetectorActivity.this, MainActivity.class);
                     intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intentMainactivity);
+
+
                 }
             });
 

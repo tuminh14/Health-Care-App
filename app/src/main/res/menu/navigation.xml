@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_store_white_24dp"
-        android:title="@string/title_shop" />
-
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_card_giftcard_white_24dp"
-        android:title="@string/title_gifts" />
+        android:id="@+id/nav_test"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
 
     <item
         android:id="@+id/nav_search"
-        android:icon="@drawable/ic_shopping_cart_white_24dp"
-        android:title="@string/title_cart" />
+        android:icon="@drawable/ic_insert_chart_black_24dp"
+        android:title="@string/title_report" />
 
     <item
-        android:id="@+id/nav_test"
-        android:icon="@drawable/ic_shopping_cart_white_24dp"
-        android:title="@string/title_cart" />
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/title_profile" />
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_store_white_24dp"
+        android:title="@string/title_shop" />
 
 </menu>

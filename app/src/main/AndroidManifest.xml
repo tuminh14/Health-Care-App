@@ -26,14 +26,11 @@
         <activity android:name="thien.ntn.Health_are_app.activity.TestReportActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.TestFragmentActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.HelpActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.ReportActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.StepDetectorActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.TrackStepsActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.RegisterActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.LoginActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.Main2Activity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ProfileActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.HomeStepsCounterActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ListViewActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.SearchFragmentActivity" />

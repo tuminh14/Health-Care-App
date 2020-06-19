@@ -11,6 +11,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -20,7 +22,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <EditText
             android:textSize="20sp"
@@ -86,23 +87,23 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <Button
-            android:visibility="gone"
             android:id="@+id/button_back"
-            android:layout_width="168dp"
-            android:layout_height="55dp"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="212dp"
-            android:layout_marginEnd="19dp"
-            android:background="@drawable/bgbtn"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/bgbtn1"
             android:text="@string/back"
             android:textAllCaps="false"
             android:textColor="#FFF"
             android:textSize="18sp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.996"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         <TextView
             android:id="@+id/counter"
@@ -140,7 +141,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view" />
 
+        <FrameLayout
+            android:id="@+id/contaner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

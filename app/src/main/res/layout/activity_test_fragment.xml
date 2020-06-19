@@ -41,6 +41,7 @@
         android:textSize="18sp" />
 
     <Button
+        android:visibility="gone"
         android:id="@+id/button_help"
         android:layout_width="168dp"
         android:layout_height="55dp"

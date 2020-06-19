@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,9 +50,7 @@ public class TrackStepsActivity extends AppCompatActivity {
     File myDirs = new File(path);
     File file =new File(path+"/stepCountHistory.txt");
 
-    //test
-    StringBuilder text = new StringBuilder();
-    StringBuilder textRead = new StringBuilder();
+    private Intent intentMainactivity;
 
     String[] lineDetail = new String[4];
     ArrayList<String> lines = new ArrayList<String>(); //Array list to store each line from the file
@@ -63,6 +62,11 @@ public class TrackStepsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_steps);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        buttonClickListener();
+
         GraphView graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(60);
@@ -71,32 +75,8 @@ public class TrackStepsActivity extends AppCompatActivity {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "Cp1252"), 100); //Open the file to read
             String line;
 
-            //test
-            BufferedReader br2 = new BufferedReader(new FileReader(file));
-            String line2;
-
-                while ((line2 = br2.readLine()) != null) {
-                    text.append(line2);
-                    text.append('\n');
-                }
-                br2.close();
-//            try {
-//                BufferedReader br = new BufferedReader(new FileReader(file));
-//                String line;
-//
-//                while ((line = br.readLine()) != null) {
-//                    text.append(line);
-//                    text.append('\n');
-//                }
-//                br.close();
-//            }
-
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
             while ((line = br.readLine()) != null) { //Read each Line from the file
-
-                //test
-                textRead.append(line);
-                textRead.append('\n');
 
                 lineDetail = line.split("\t"); //Split the line by tab and store in a string array
                 lines.add(lineDetail[0] + "\t" + lineDetail[1] + "\t" + lineDetail[2] + "\t" + lineDetail[3]);
@@ -153,4 +133,35 @@ public class TrackStepsActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    private void buttonClickListener() {
+        Button clear = (Button) findViewById(R.id.clear_data);
+        Button back = (Button) findViewById(R.id.button_back);
+        //Play Button onclick listener
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (file.exists()) {
+                    file.delete();
+                }
+                String msg = "Data cleared";
+                Toast toast = Toast.makeText(TrackStepsActivity.this, msg, Toast.LENGTH_SHORT);
+                toast.show();
+
+                intentMainactivity = new Intent(TrackStepsActivity.this, TrackStepsActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+            }
+        });
+
+        //Handling back button click
+        //Going back from current StepDetector Activity to Main Activity
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentMainactivity = new Intent(TrackStepsActivity.this, MainActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+            }
+        });
+    }
 }

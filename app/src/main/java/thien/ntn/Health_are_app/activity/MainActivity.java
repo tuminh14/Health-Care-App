@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+
 //        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 //        actionBar.setLogo(R.drawable.settings);
 //        actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#eac9c0"))));
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeActivity()).commit();
+                    new TestFragmentActivity()).commit();
         }
     }
 
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
                     Fragment selectedFragment = null;
 
                     switch (item.getItemId()) {
-                        case R.id.nav_home:
-                            selectedFragment = new HomeActivity();
+                        case R.id.nav_test:
+                            selectedFragment = new TestFragmentActivity();
                             break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileActivity();
@@ -98,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_search:
                             selectedFragment = new SearchFragmentActivity();
                             break;
-                        case R.id.nav_test:
-                            selectedFragment = new TestFragmentActivity();
+                        case R.id.nav_home:
+                            selectedFragment = new HomeActivity();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
