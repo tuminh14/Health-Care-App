@@ -39,20 +39,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_sign_up" />
 
-        <EditText
-            android:id="@+id/edit_text_gender"
-            android:layout_width="288dp"
+
+
+        <RadioGroup
+            android:id="@+id/radio_group_gender"
+            android:layout_width="307dp"
             android:layout_height="50dp"
             android:layout_marginStart="48dp"
             android:layout_marginTop="28dp"
-            android:background="@drawable/bginput"
-            android:hint="Gender"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:textColorHint="#87ffffff"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
+            android:showDividers="beginning|middle|end"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_name">
+
+            <RadioButton
+                android:id="@+id/radio_gender_male"
+                android:layout_width="91dp"
+                android:layout_height="match_parent"
+                android:text="male"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="159dp"
+                tools:layout_editor_absoluteY="208dp" />
+
+            <RadioButton
+                android:id="@+id/radio_gender_female"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:text="female"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="251dp"
+                tools:layout_editor_absoluteY="208dp" />
+
+            <RadioButton
+                android:id="@+id/radio_gender_order"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="order"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="48dp"
+                tools:layout_editor_absoluteY="205dp" />
+
+
+        </RadioGroup>
 
         <EditText
             android:id="@+id/edit_text_weight"
@@ -61,13 +89,14 @@
             android:layout_marginStart="48dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/bginput"
-            android:hint="Weight"
+            android:hint="Weight (kg)"
+            android:inputType="number"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:textColorHint="#87ffffff"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_gender" />
+            app:layout_constraintTop_toBottomOf="@+id/radio_group_gender" />
         <EditText
             android:id="@+id/edit_text_height"
             android:layout_width="288dp"
@@ -75,7 +104,8 @@
             android:layout_marginStart="48dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/bginput"
-            android:hint="Height"
+            android:hint="Height (cm)"
+            android:inputType="number"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
@@ -90,6 +120,7 @@
             android:layout_marginTop="28dp"
             android:background="@drawable/bginput"
             android:hint="Phone Number"
+            android:inputType="phone"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
@@ -104,13 +135,13 @@
             android:layout_marginTop="28dp"
             android:background="@drawable/bginput"
             android:hint="Birthday"
+            android:inputType="date"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:textColorHint="#87ffffff"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_verify_code" />
-
         <EditText
             android:id="@+id/edit_text_email"
             android:layout_width="288dp"

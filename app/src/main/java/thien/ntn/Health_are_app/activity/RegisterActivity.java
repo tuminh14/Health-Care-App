@@ -3,9 +3,13 @@ package thien.ntn.Health_are_app.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,16 +21,19 @@ import androidx.work.WorkManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
+
 import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.Health_are_app.model.UserInformation;
 import thien.ntn.Health_are_app.validation.RegisterValidation;
-import thien.ntn.Health_are_app.worker.LoginWorker;
 import thien.ntn.Health_are_app.worker.RegisterWorker;
 import thien.ntn.myapplication.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText editName, editGender, editWeight, editHeight, editPhoneNumber, editBirthDay, editEmail, editPassword;
+    EditText editName, editWeight, editHeight, editPhoneNumber, editBirthDay, editEmail, editPassword;
+    RadioGroup radioGender;
     Button btnCreate;
     public UserInformation userInformation;
 
@@ -50,11 +57,71 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+        editBirthDay.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+            private String ddmmyyyy = "YYYYMMDD";
+            private Calendar cal = Calendar.getInstance();
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals(current)) {
+                    String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                    String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                    int cl = clean.length();
+                    int sel = cl;
+                    for (int i = 2; i <= cl && i < 6; i += 2) {
+                        sel++;
+                    }
+                    //Fix for pressing delete next to a forward slash
+                    if (clean.equals(cleanC)) sel--;
+
+                    if (clean.length() < 8){
+                        clean = clean + ddmmyyyy.substring(clean.length());
+                    }else{
+                        //This part makes sure that when we finish entering numbers
+                        //the date is correct, fixing it otherwise
+                        int year  = Integer.parseInt(clean.substring(0,4));
+                        int mon  = Integer.parseInt(clean.substring(4,6));
+                        int day = Integer.parseInt(clean.substring(6,8));
+
+                        mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                        cal.set(Calendar.MONTH, mon-1);
+                        year = (year<1900)?1900:(year>2100)?2100:year;
+                        cal.set(Calendar.YEAR, year);
+                        // ^ first set year for the line below to work correctly
+                        //with leap years - otherwise, date e.g. 29/02/2012
+                        //would be automatically corrected to 28/02/2012
+
+                        day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                        clean = String.format("%02d%02d%02d",year, mon, day);
+                    }
+
+                    clean = String.format("%s-%s-%s", clean.substring(0, 4),
+                            clean.substring(4, 6),clean.substring(6, 8));
+
+                    sel = sel < 0 ? 0 : sel;
+                    current = clean;
+                    editBirthDay.setText(current);
+                    editBirthDay.setSelection(sel < current.length() ? sel : current.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private boolean isValidInfo() {
         if (!RegisterValidation.isEmail(editEmail.getText().toString().trim())) {
-            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.EMAIL_INVALID,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.EMAIL_INVALID, Toast.LENGTH_SHORT).show();
             return false;
         } else if (!RegisterValidation.isDate(editBirthDay.getText().toString().trim())){
             Toast.makeText(getApplicationContext(),Constants.ERROR_MSG.BIRTH_DAY_INVALID,Toast.LENGTH_SHORT).show();
@@ -78,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
     
     private boolean editTextInfoIsEmpty() {
         return editName.getText().toString().isEmpty() ||
-                editGender.getText().toString().isEmpty() ||
+                (radioGender.getCheckedRadioButtonId() == -1) ||
                 editWeight.getText().toString().isEmpty() ||
                 editHeight.getText().toString().isEmpty() ||
                 editPhoneNumber.getText().toString().isEmpty() ||
@@ -90,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void AnhXa(){
         editName=(EditText)findViewById(R.id.edit_text_name);
-        editGender=(EditText)findViewById(R.id.edit_text_gender);
+        radioGender = (RadioGroup)findViewById(R.id.radio_group_gender);
         editWeight=(EditText)findViewById(R.id.edit_text_weight);
         editHeight=(EditText)findViewById(R.id.edit_text_height);
         editPhoneNumber=(EditText)findViewById(R.id.edit_text_verify_code);
@@ -118,7 +185,8 @@ public class RegisterActivity extends AppCompatActivity {
             requestJson.put("passWord",editPassword.getText().toString().trim());
             requestJson.put("phoneNumber",editPhoneNumber.getText().toString().trim());
             requestJson.put("fullName",editName.getText().toString().trim());
-            requestJson.put("gender",editGender.getText().toString().trim());
+            RadioButton selectedRadioGender = (RadioButton) findViewById(radioGender.getCheckedRadioButtonId());
+            requestJson.put("gender",selectedRadioGender.getText().toString().trim());
             requestJson.put("weight",editWeight.getText().toString().trim());
             requestJson.put("height",editHeight.getText().toString().trim());
             requestJson.put("birthDay",editBirthDay.getText().toString().trim());
