@@ -1,36 +1,33 @@
 package thien.ntn.Health_are_app.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.Health_are_app.model.UserInformation;
+import thien.ntn.Health_are_app.validation.RegisterValidation;
+import thien.ntn.Health_are_app.worker.LoginWorker;
+import thien.ntn.Health_are_app.worker.RegisterWorker;
 import thien.ntn.myapplication.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText editName, editGender, editWeight, editHeight, editPhoneNumber, editBirthDay, editEmail, editPassword;
     Button btnCreate;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     public UserInformation userInformation;
 
     private String test = new String();
@@ -42,138 +39,169 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         AnhXa();
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnCreate.setOnClickListener(view -> {
 
-                if (editName.getText().toString().isEmpty() || editGender.getText().toString().isEmpty() ||
-                        editWeight.getText().toString().isEmpty() || editHeight.getText().toString().isEmpty() ||
-                        editPhoneNumber.getText().toString().isEmpty() || editBirthDay.getText().toString().isEmpty() ||
-                        editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()
-                ){
-                    Toast.makeText(RegisterActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if (!editEmail.getText().toString().trim().matches(emailPattern)) {
-                        Toast.makeText(getApplicationContext(),"Email không hợp lệ",Toast.LENGTH_SHORT).show();
-                    } else if (!validateJavaDate(editBirthDay.getText().toString().trim())){
-                        Toast.makeText(getApplicationContext(),"Ngày sinh không hợp lệ",Toast.LENGTH_SHORT).show();
-                    } else if(editPassword.getText().toString().trim().length() < 6){
-                        Toast.makeText(getApplicationContext(),"Mật khẩu nhiều hơn 6 ký tự",Toast.LENGTH_SHORT).show();
-                    } else if (editName.getText().toString().trim().length() < 2 ||
-                            editName.getText().toString().trim().length() > 100) {
-                        Toast.makeText(getApplicationContext(),"Tên nhiều hơn 2 ký tự và ít hơn 100 ký tự",Toast.LENGTH_SHORT).show();
-                    } else if (isNumeric(editWeight.getText().toString().trim()) == false){
-                        Toast.makeText(getApplicationContext(),"Cân nặng phải là số",Toast.LENGTH_SHORT).show();
-                    } else if (isNumeric(editHeight.getText().toString().trim()) == false){
-                        Toast.makeText(getApplicationContext(),"Chiều cao phải là số",Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        postData();
-                    }
+            if (editTextInfoIsEmpty()) {
+                Toast.makeText(RegisterActivity.this, Constants.ERROR_MSG.INFO_IS_EMPTY, Toast.LENGTH_SHORT).show();
+            }
+            else {
+               if (isValidInfo()) {
+                    postData();
                 }
             }
         });
     }
 
-    public static boolean isNumeric(String str) {
-        return str.matches("[-+]?\\d*\\.?\\d+");
-    }
-
-    public static boolean validateJavaDate(String strDate)
-    {
-        /*
-         * Set preferred date format,
-         * For example MM-dd-yyyy, MM.dd.yyyy,dd.MM.yyyy etc.*/
-        SimpleDateFormat sdfrmt = new SimpleDateFormat("yyyy-MM-dd");
-        sdfrmt.setLenient(false);
-        /* Create Date object
-         * parse the string into date
-         */
-        try
-        {
-            Date javaDate = sdfrmt.parse(strDate);
-            System.out.println(strDate+" is valid date format");
-        }
-        /* Date format is invalid */
-        catch (ParseException e)
-        {
-            System.out.println(strDate+" is Invalid Date format");
+    private boolean isValidInfo() {
+        if (!RegisterValidation.isEmail(editEmail.getText().toString().trim())) {
+            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.EMAIL_INVALID,Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!RegisterValidation.isDate(editBirthDay.getText().toString().trim())){
+            Toast.makeText(getApplicationContext(),Constants.ERROR_MSG.BIRTH_DAY_INVALID,Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(!RegisterValidation.isValidPassword(editPassword.getText().toString().trim())){
+            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.PASSWORD_LIMITED,Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!RegisterValidation.isValidName(editName.getText().toString().trim())) {
+            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.NAME_LIMITED,Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!RegisterValidation.isNumeric(editWeight.getText().toString().trim())){
+            Toast.makeText(getApplicationContext(),Constants.ERROR_MSG.WEIGHT_INVALID,Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!RegisterValidation.isNumeric(editHeight.getText().toString().trim())){
+            Toast.makeText(getApplicationContext(),Constants.ERROR_MSG.HEIGHT_INVALID,Toast.LENGTH_SHORT).show();
             return false;
         }
-        /* Return true if date format is valid */
+
         return true;
+    }
+    
+    private boolean editTextInfoIsEmpty() {
+        return editName.getText().toString().isEmpty() ||
+                editGender.getText().toString().isEmpty() ||
+                editWeight.getText().toString().isEmpty() ||
+                editHeight.getText().toString().isEmpty() ||
+                editPhoneNumber.getText().toString().isEmpty() ||
+                editBirthDay.getText().toString().isEmpty() ||
+                editEmail.getText().toString().isEmpty() ||
+                editPassword.getText().toString().isEmpty() ;
+
     }
 
     public void AnhXa(){
-
         editName=(EditText)findViewById(R.id.edit_text_name);
         editGender=(EditText)findViewById(R.id.edit_text_gender);
         editWeight=(EditText)findViewById(R.id.edit_text_weight);
         editHeight=(EditText)findViewById(R.id.edit_text_height);
-        editPhoneNumber=(EditText)findViewById(R.id.edit_text_phoneNumber);
+        editPhoneNumber=(EditText)findViewById(R.id.edit_text_verify_code);
         editBirthDay=(EditText)findViewById(R.id.edit_text_birthDay);
         editEmail=(EditText)findViewById(R.id.edit_text_email);
         editPassword=(EditText)findViewById(R.id.edit_text_password);
 
         btnCreate=(Button)findViewById(R.id.btn_create);
     }
+    private void setShowButton() {
+        btnCreate.setVisibility(View.VISIBLE);
+        btnCreate.setEnabled(true);
+    }
 
+    private void setHideButton() {
+        btnCreate.setEnabled(false);
+        btnCreate.setVisibility(View.INVISIBLE);
+    }
     public void postData() {
-        RequestQueue requestQueue=Volley.newRequestQueue(RegisterActivity.this);
-        String url="http://165.22.107.58/api/user/registry";
-//        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JSONObject object = new JSONObject();
+        setHideButton();
+        JSONObject requestJson = new JSONObject();
         try {
             //input your API parameters
-            object.put("email",editEmail.getText().toString());
-            object.put("passWord",editPassword.getText().toString());
-            object.put("phoneNumber",editPhoneNumber.getText().toString());
-            object.put("fullName",editName.getText().toString());
-            object.put("gender",editGender.getText().toString());
-            object.put("weight",editWeight.getText().toString());
-            object.put("height",editHeight.getText().toString());
-            object.put("birthDay",editBirthDay.getText().toString());
+            requestJson.put("email",editEmail.getText().toString().trim());
+            requestJson.put("passWord",editPassword.getText().toString().trim());
+            requestJson.put("phoneNumber",editPhoneNumber.getText().toString().trim());
+            requestJson.put("fullName",editName.getText().toString().trim());
+            requestJson.put("gender",editGender.getText().toString().trim());
+            requestJson.put("weight",editWeight.getText().toString().trim());
+            requestJson.put("height",editHeight.getText().toString().trim());
+            requestJson.put("birthDay",editBirthDay.getText().toString().trim());
 
-//            object.put("email","thiengmail.com");
-//            object.put("passWord","121212");
-//            object.put("phoneNumber","0918290203");
-//            object.put("fullName","Thien");
-//            object.put("gender","Nam");
-//            object.put("weight","12");
-//            object.put("height","12");
-//            object.put("birthDay","2020-02-02");
+//            requestJson.put("email","thien123123@gmail.com");
+//            requestJson.put("passWord","121212");
+//            requestJson.put("phoneNumber","0918290203");
+//            requestJson.put("fullName","Thien");
+//            requestJson.put("gender","Nam");
+//            requestJson.put("weight","12");
+//            requestJson.put("height","12");
+//            requestJson.put("birthDay","2020-02-02");
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
+            setShowButton();
         }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-//                            JSONObject jsonObj = response.getJSONObject("payload");
-                            String success = response.getString("success");
-                            Toast.makeText(RegisterActivity.this, success, Toast.LENGTH_SHORT).show();
-//
-                            if (success.equals("false")){
-                                Toast.makeText(getApplicationContext(),"Đăng kí không thành công",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),"Đăng kí thành công",Toast.LENGTH_SHORT).show();
-                                Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(sub1);
-                            }
+        Data requestData = new Data.Builder().putString("request", requestJson.toString()).build();
+        // Create worker
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(RegisterWorker.class)
+                .setInputData(requestData)
+                .build();
 
+        // Push worker to queue
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+        WorkManager.getInstance().getWorkInfoByIdLiveData(oneTimeWorkRequest.getId()).observe(this, workStatus -> {
+            try {
+                if (workStatus.getState() == WorkInfo.State.SUCCEEDED) {
+                    Data data = workStatus.getOutputData();
+                    String result = data.getString("result");
+
+                    JSONObject request = new JSONObject(result);
+
+                    Boolean isSuccess = request.getBoolean("success");
+
+                    if (!isSuccess) {
+                        JSONObject error = request.getJSONObject("error");
+                        String msgError;
+                        try {
+                            // Get order error message
+                            msgError = error.getString("error");
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            // get validate message
+                            String errorString = error.toString().replaceAll("[\"{}]","");
+                            String[] ListError = errorString.split("[,:]");
+                            // select first validate message error
+                            msgError = ListError[1];
                         }
+                        Toast.makeText(RegisterActivity.this, msgError, Toast.LENGTH_SHORT).show();
+                        setShowButton();
+                    } else {
+                        JSONObject paloadObject = request.getJSONObject("payload");
+                        String email = paloadObject.getString("email");
+
+
+                        SharedPreferences sp = getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.REGISTRY_INFO, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        //Lưu dữ liệu
+                        editor.putString("email", email);
+                        editor.putString("password",editPassword.getText().toString().trim());
+                        //Hoàn thành
+                        editor.commit();
+                        Toast.makeText(getApplicationContext(), Constants.NOTIFICATION.REGISTRY.SUCCESSFUL, Toast.LENGTH_SHORT).show();
+                        Intent sub1 = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(sub1);
+                        setShowButton();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(RegisterActivity.this, "Error getting response", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (workStatus.getState() == WorkInfo.State.FAILED) {
+                        Data data = workStatus.getOutputData();
+                        String msgError = data.getString("result");
+                        Toast.makeText(RegisterActivity.this, msgError, Toast.LENGTH_SHORT).show();
+                        setShowButton();
+                    }
+                }
+            } catch (JSONException e) {
+                Toast.makeText(RegisterActivity.this, Constants.NOTIFICATION.REGISTRY.UNSUCESSFUL, Toast.LENGTH_SHORT).show();
+                setShowButton();
             }
+
         });
-        requestQueue.add(jsonObjectRequest);
     }
 }
