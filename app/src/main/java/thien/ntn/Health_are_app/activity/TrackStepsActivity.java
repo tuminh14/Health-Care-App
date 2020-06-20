@@ -1,23 +1,15 @@
 package thien.ntn.Health_are_app.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -28,17 +20,19 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
 import thien.ntn.myapplication.R;
 
-
-public class HomeActivity extends Fragment {
+public class TrackStepsActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<ListviewContent> listviewContents;
@@ -55,25 +49,18 @@ public class HomeActivity extends Fragment {
     ArrayList<String> lines = new ArrayList<String>(); //Array list to store each line from the file
     ArrayList<Date> dates = new ArrayList<Date>();
 
-    @Nullable
+    //Author: Abhilash Gudasi, Paras Bansal
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_home, container, false);
-
-
-
-    }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.track_steps);
 
-    }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        buttonClickListener();
 
-        GraphView graph = (GraphView)getView().findViewById(R.id.graph);
+        GraphView graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(60);
         graph.getViewport().setScrollable(true);
@@ -92,18 +79,24 @@ public class HomeActivity extends Fragment {
                 Date date3=formatter3.parse(interm1);
                 dates.add(date3);
 
-                // dates.add(new Date(interm1));
+               // dates.add(new Date(interm1));
             }
 
             Iterator it1 = lines.iterator();
             Iterator it2 = dates.iterator();
             DataPoint[] dp = new DataPoint[25];
+
+
+
             while (it1.hasNext() && it2.hasNext()) {
+
                 Date a = (Date)it2.next();
                 Integer b = Integer.parseInt(it1.next().toString().split("\t")[1]);
                 series.appendData(//new DataPoint(4, 6)
                         new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
-                );
+
+//                        new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
+                         );
             }
             //series.appendData(new DataPoint(new Date(2018,04,16),20),true,100);
             graph.addSeries(series);
@@ -122,18 +115,52 @@ public class HomeActivity extends Fragment {
             e.printStackTrace();
         }
 
+        listView=(ListView)findViewById(R.id.list);
+
+        listviewContents = new ArrayList<>();
+        Iterator iter = lines.iterator();
+        int i =0;
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        while(iter.hasNext()){
+            String str = iter.next().toString();
+            double distance = Double.parseDouble(str.split("\t")[2]);
+            listviewContents.add(new ListviewContent(str.split("\t")[0], str.split("\t")[1]+" steps", decimalFormat.format(distance).toString()+" feets",str.split("\t")[3],str.split("\t")[3]+ " mins"));
+        }
+
+        adapter= new ListviewAdap(listviewContents,getApplicationContext());
+        listView.setAdapter(adapter);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void buttonClickListener() {
+        Button clear = (Button) findViewById(R.id.clear_data);
+        Button back = (Button) findViewById(R.id.button_back);
+        //Play Button onclick listener
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (file.exists()) {
+                    file.delete();
+                }
+                String msg = "Data cleared";
+                Toast toast = Toast.makeText(TrackStepsActivity.this, msg, Toast.LENGTH_SHORT);
+                toast.show();
 
+                intentMainactivity = new Intent(TrackStepsActivity.this, TrackStepsActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+            }
+        });
+
+        //Handling back button click
+        //Going back from current StepDetector Activity to Main Activity
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentMainactivity = new Intent(TrackStepsActivity.this, MainActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+            }
+        });
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
 }

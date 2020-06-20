@@ -53,10 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         editPassword.setText(password);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 if (editEmail.getText().toString().isEmpty() || editPassword.getText().toString().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Bạn chưa điền đ1ầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 }
                 else {
 

@@ -44,13 +44,13 @@ public class SearchFragmentActivity extends Fragment {
 //        BarChart barChart = (BarChart)findViewById(R.id.barChart);
         // truyền cứng dl cho chart
         ArrayList<BarEntry> visitors = new ArrayList<>();
-        visitors.add(new BarEntry(2014, 402));
-        visitors.add(new BarEntry(2015, 475));
-        visitors.add(new BarEntry(2016, 508));
-        visitors.add(new BarEntry(2017, 660));
-        visitors.add(new BarEntry(2018, 550));
-        visitors.add(new BarEntry(2019, 630));
-        visitors.add(new BarEntry(2020, 470));
+        visitors.add(new BarEntry(21014, 402));
+        visitors.add(new BarEntry(21015, 475));
+        visitors.add(new BarEntry(21016, 508));
+        visitors.add(new BarEntry(21017, 660));
+        visitors.add(new BarEntry(21018, 550));
+        visitors.add(new BarEntry(21019, 630));
+        visitors.add(new BarEntry(21020, 470));
         // xét màu sắc, kích cỡ chữ
         BarDataSet barDataSet = new BarDataSet(visitors, "Visitors");
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
