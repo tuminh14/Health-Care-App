@@ -2,7 +2,7 @@ import jwt from '../util/jwt';
 import globalConstant from '../config/globalConstants';
 import config from '../config/config';
 
-export async function isUser(req, res, next) {
+export function isUser(req, res, next) {
     const authorization = req.header('Authorization');
     
     if (typeof authorization != 'string') {
@@ -13,7 +13,7 @@ export async function isUser(req, res, next) {
     }
     const authorizationArray = authorization.split(' ');
     
-    if (authorizationArray[0] === 'Bearer ') {
+    if (authorizationArray[0] === 'Bearer') {
         const token = authorizationArray[1];
         let userData;
 
@@ -26,7 +26,7 @@ export async function isUser(req, res, next) {
                 }));
             } else {
                 req.JWTDecoded = userData;
-                next()
+                return next();
             }
         } catch (err) {
             return next(Promise.reject({
