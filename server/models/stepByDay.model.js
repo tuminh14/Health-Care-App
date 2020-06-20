@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import User from "./users.model"
 import globalConstant from "../config/globalConstants";
 const StepByDaySchema = mongoose.Schema({
-    userId: {type: mongoose.Types.ObjectId, ref: "User", required: true, unique: true},
+    userId: {type: String, required: true, unique: false, index: 0},
     date: {type: String, required:true},
     h0: [{type: Object}],
     h1: [{type: Object}],
@@ -35,4 +35,4 @@ StepByDaySchema.set("toJSON",{
         delete ret.__v;
     }
 });
-export default mongoose.model("Step", StepByDaySchema);
+export default mongoose.model("StepByDay", StepByDaySchema);

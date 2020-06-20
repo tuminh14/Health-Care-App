@@ -16,7 +16,7 @@ export async function registry(user) {
         phoneNumber: user.phoneNumber,
         birthDay: user.birthDay,
         role: globalConstants.role.USER,
-        active: globalConstants.activate.DEACTIVATED,
+        activeMail: globalConstants.activate.ACTIVATED,
         online: false,
         weight: user.weight,
         height: user.height
@@ -78,7 +78,7 @@ export async function login(user) {
                         online: true
                     }
                 });
-                let token = await JWT.issue({ _id: existUser._id }, config.jwtSecret);
+                let token = await JWT.issue({ _id: existUser.cuid }, config.jwtSecret);
                 return {
                     user: existUser,
                     token: token
@@ -230,7 +230,7 @@ export async function sendVerifyEmail(user){
 
 export async function saveStepByDay(data){
     try{
-        let existUser = await userModel.findOne({_id: mongoose.Types.ObjectId(data._id)});
+        let existUser = await userModel.findOne({cuid: data._id});
         if(!existUser){
             return Promise.reject(
                 {
@@ -244,10 +244,10 @@ export async function saveStepByDay(data){
             minute: data.time.split(':')[1],
             seccond: data.time.split(':')[2]
         }
-        let existDate = await StepByDay.findOne({date: data.date.toString(), userId: existUser._id});
+        let existDate = await StepByDay.findOne({date: data.date.toString(), userId: data._id});
         if(!existDate){
             let stepDay = {
-                userId: existUser._id,
+                userId: data._id,
                 date: data.date,
             }
             let key = 'h' +  time.hour.toString();
@@ -268,12 +268,51 @@ export async function saveStepByDay(data){
             step: data.step,
             totalTime: data.totalTime,
             totalDistance: data.totalDistance
-        }
+        };
         await existDate[key].push(stepDay);
         await existDate.save();
         return existDate.toJSON();
     }catch(err) {
-        console.error('error save step by day', err)
+        console.error('error save step by day', err);
+        return Promise.reject(
+            {
+                status: err.status || 500,
+                err: err.message || error.errors || 'Server Internal Error'
+            }
+        )
+    }
+}
+export async function getStepByDay(data){
+    try{
+        let existDate = await StepByDay.find({userId: data._id.toString()}).lean();
+        if(!existDate){
+            return Promise.reject(
+                { 
+                    status: 403,
+                    err: 'Invalid user'
+                }
+            )
+        }
+        return existDate;
+        // let days = await StepByDay.find({}).lean();
+        // let returnDays = [];
+        // let startDayCondition = parseInt(data.startDay.split('/')[0], 10);
+        // let startMonthCondition = parseInt(data.startDay.split('/')[1], 10);
+        // let startYearCondition =  parseInt(data.startDay.split('/')[2], 10);
+        // days.filter((day)=>{
+        //     let dd = parseInt(day.date.split('/')[0], 10);
+        //     let mm = parseInt(day.date.split('/')[1], 10);
+        //     let yyyy = parseInt(day.date.split('/')[2], 10);
+        //     if(dd < startDayCondition && mm < startMonthCondition && yyyy < startYearCondition){
+        //         return false;
+        //     }
+        //     return true;
+        // }).map((day)=>{
+        //     returnDays.push(day)
+        // })
+        // return returnDays
+    }catch(err) {
+        console.error('error get step by date', err);
         return Promise.reject(
             {
                 status: err.status || 500,
@@ -283,3 +322,26 @@ export async function saveStepByDay(data){
     }
 }
 
+export async function deleteAllStep(data){
+    try{
+        let existDate = await StepByDay.find({userId: data._id.toString()});
+        if(!existDate){
+            return Promise.reject(
+                { 
+                    status: 403,
+                    err: 'Invalid user'
+                }
+            )
+        }
+        await StepByDay.deleteMany({userId: data._id.toString()})
+        return ({})
+    }catch(err) {
+        console.error('error delete all step by day', err);
+        return Promise.reject(
+            {
+                status: err.status || 500,
+                err: err.message || error.errors || 'Server Internal Error'
+            }
+        )
+    }
+}

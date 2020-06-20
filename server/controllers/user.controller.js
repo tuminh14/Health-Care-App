@@ -59,3 +59,27 @@ export async function saveStepByDay(req, res){
         return res.RH.successError(error);
     }
 }
+
+export async function getStepByDay(req, res){
+    try {
+        let options ={};
+        options._id = req.JWTDecoded._id;
+        console.log(req.JWTDecoded._id);
+        let payload = await userService.getStepByDay(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.successError(error);
+    }
+}
+
+export async function deleteAllStep(req, res){
+    try {
+        let options ={};
+        options._id = req.JWTDecoded._id;
+        console.log(req.JWTDecoded._id);
+        let payload = await userService.deleteAllStep(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.successError(error);
+    }
+}

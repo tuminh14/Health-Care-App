@@ -39,7 +39,19 @@ router.route('/user/sendVerifyEmail')
 router.route('/user/saveStepByDay')
     .post(
         isUser,
-        // userValidation.saveStepByDay,
+        userValidation.saveStepByDay,
         userController.saveStepByDay,
+    )
+
+router.route('/user/getStepByDay')
+    .get(
+        isUser,
+        userController.getStepByDay,
+    )
+
+router.route('/user/deleteAllStep')
+    .delete(
+        isUser,
+        userController.deleteAllStep,
     )
 export default router;
