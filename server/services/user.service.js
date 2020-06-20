@@ -1,5 +1,7 @@
 import globalConstants from '../config/globalConstants';
 import userModel from '../models/users.model';
+import StepByDay from '../models/stepByDay.model';
+import mongoose from 'mongoose'
 import hashPassword from '../util/helper/hashPassword';
 import JWT from '../util/jwt';
 import config from '../config/config';
@@ -216,11 +218,66 @@ export async function sendVerifyEmail(user){
         return Promise.reject({ status: 403, error: 'Incorrect email.' })
 
     }catch(err){
-        console.error('error user send verify email: ', error);
+        console.error('error user send verify email: ', err);
         return Promise.reject(
             {
-                status: error.status || 500,
-                error: error.message || error.errors || 'Server Internal Error'
+                status: err.status || 500,
+                err: err.message || err.errors || 'Server Internal Error'
+            }
+        )
+    }
+}
+
+export async function saveStepByDay(data){
+    try{
+        let existUser = await userModel.findOne({_id: mongoose.Types.ObjectId(data._id)});
+        if(!existUser){
+            return Promise.reject(
+                {
+                    status: 403,
+                    err: 'User dont existed'
+                }
+            )
+        }
+        let time = {
+            hour: data.time.split(':')[0],
+            minute: data.time.split(':')[1],
+            seccond: data.time.split(':')[2]
+        }
+        let existDate = await StepByDay.findOne({date: data.date.toString(), userId: existUser._id});
+        if(!existDate){
+            let stepDay = {
+                userId: existUser._id,
+                date: data.date,
+            }
+            let key = 'h' +  time.hour.toString();
+            stepDay[key] = [{
+                time: data.time.toString(),
+                date: data.date.toString(),
+                step: data.step,
+                totalTime: data.totalTime,
+                totalDistance: data.totalDistance
+            }]
+            let dateInsert = await StepByDay.create(stepDay);
+            return dateInsert.toJSON();
+        }
+        let key = 'h' +  time.hour.toString();
+        let stepDay = {
+            time: data.time.toString(),
+            date: data.date.toString(),
+            step: data.step,
+            totalTime: data.totalTime,
+            totalDistance: data.totalDistance
+        }
+        await existDate[key].push(stepDay);
+        await existDate.save();
+        return existDate.toJSON();
+    }catch(err) {
+        console.error('error save step by day', err)
+        return Promise.reject(
+            {
+                status: err.status || 500,
+                err: err.message || error.errors || 'Server Internal Error'
             }
         )
     }

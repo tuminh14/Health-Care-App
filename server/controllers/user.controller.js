@@ -1,5 +1,6 @@
 import * as userService from '../services/user.service';
-
+import User from '../models/users.model'
+import mongoose from 'mongoose'
 export async function registry(req, res) {
     try {
         let options = req.body;
@@ -44,6 +45,17 @@ export async function sendVerifyEmail(req, res) {
         let payload = await userService.sendVerifyEmail(options);
         res.RH.success(payload);
     } catch (error) {
-        return res.RH.error(error);
+        return res.RH.successError(error);
+    }
+}
+
+export async function saveStepByDay(req, res){
+    try {
+        let options =req.body;
+        options._id = req.JWTDecoded._id;
+        let payload = await userService.saveStepByDay(options);
+        res.RH.success(payload);
+    } catch (error) {
+        return res.RH.successError(error);
     }
 }

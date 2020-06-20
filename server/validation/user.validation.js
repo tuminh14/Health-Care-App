@@ -48,3 +48,11 @@ export const sendverifyMail = validate([
     query('email', 'Invalid email').matches(globalConstants.regex.EMAIL),
 ]);
 
+export const saveStepByDay = validate([
+    body('time','Invalid time').trim().isString(),
+    body('date','Invalid date').trim().isString(),
+    body('step','Invalid step').trim().isNumeric(),
+    body('totalDistance','Invalid distance').trim().isNumeric(),
+    body('totalTime','Invalid totalTime').trim().isNumeric(),
+])
+

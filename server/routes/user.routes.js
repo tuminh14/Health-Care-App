@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import * as userController from '../controllers/user.controller';
 import * as userValidation from '../validation/user.validation';
+import {isUser} from '../middleware/auth.middleware'
 
 const router = new Router();
 
@@ -35,5 +36,10 @@ router.route('/user/sendVerifyEmail')
         userValidation.sendverifyMail,
         userController.sendVerifyEmail
     )
-
+router.route('/user/saveStepByDay')
+    .post(
+        isUser,
+        // userValidation.saveStepByDay,
+        userController.saveStepByDay,
+    )
 export default router;
