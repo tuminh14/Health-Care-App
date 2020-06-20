@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.myapplication.R;
 
 public class StepDetectorActivity extends AppCompatActivity {
@@ -50,12 +51,8 @@ public class StepDetectorActivity extends AppCompatActivity {
     boolean isServiceStopped;
 
     //Reading/Writing the steps related history on to a local storage file
-    public String path  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter";
-    File myDirs = new File(path);
-    File file =new File(path+"/stepCountHistory.txt");
 
-    //test
-    StringBuilder text = new StringBuilder();
+
 
     private Intent intent,intentMainactivity;
     private static final String TAG = "SensorEvent";
@@ -147,11 +144,13 @@ public class StepDetectorActivity extends AppCompatActivity {
                     stopService(new Intent(getBaseContext(), StepCountingService.class));
 
                     //To save the current step count results on to local file
+
                     try {
-                        Save (file,saveText);
+                        Save (Constants.STEP_COUNTER_FILE.FILE_TEMP,saveText);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
 
                     //test
 //                    try {
@@ -198,8 +197,8 @@ public class StepDetectorActivity extends AppCompatActivity {
     *Author: Abhilash Gudasi
      */
     private void Save(File myfile,String[] data) throws IOException {
-        if(!myDirs.exists()){
-            myDirs.mkdirs();
+        if(!Constants.STEP_COUNTER_FILE.DIR_TEMP.exists()){
+            Constants.STEP_COUNTER_FILE.DIR_TEMP.mkdirs();
         }
         if(!myfile.exists()){
             myfile.createNewFile();
@@ -208,7 +207,7 @@ public class StepDetectorActivity extends AppCompatActivity {
         OutputStreamWriter myOutWriter = null;
         try
         {
-            fos = new FileOutputStream(file,true);
+            fos = new FileOutputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP,true);
             myOutWriter = new OutputStreamWriter(fos);
         }
         catch (FileNotFoundException e)

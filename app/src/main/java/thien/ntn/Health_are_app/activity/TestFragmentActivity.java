@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.myapplication.R;
 
 
@@ -32,8 +34,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+
 public class TestFragmentActivity extends Fragment {
     private static final int REQUEST_WRITE_STORAGE = 112;
+
+    //Reading/Writing the steps related history on to/from a local storage file
+
+
+    private Intent intentMainactivity;
+
+    String[] lineDetail = new String[4];
+    ArrayList<String> lines = new ArrayList<String>(); //Array list to store each line from the file
+    ArrayList<Date> dates = new ArrayList<Date>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,6 +109,28 @@ public class TestFragmentActivity extends Fragment {
         track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0){
+
+                //get file
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP), "Cp1252"), 100); //Open the file to read
+                    String line;
+
+                    while ((line = br.readLine()) != null) { //Read each Line from the file
+
+                        lineDetail = line.split("\t"); //Split the line by tab and store in a string array
+                        lines.add(lineDetail[0] + "\t" + lineDetail[1] + "\t" + lineDetail[2] + "\t" + lineDetail[3]);
+                        //String interm = lineDetail[0].split(" ")[0];
+                        String interm1 = lineDetail[0];
+                        SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+                        Date date3=formatter3.parse(interm1);
+                        dates.add(date3);
+                    }
+
+                    br.close();//Close the Buffer reader
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Intent intentScore = new Intent(getActivity(), TrackStepsActivity.class);
                 intentScore.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intentScore);

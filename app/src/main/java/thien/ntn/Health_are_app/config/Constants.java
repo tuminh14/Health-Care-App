@@ -1,5 +1,9 @@
 package thien.ntn.Health_are_app.config;
 
+import android.os.Environment;
+
+import java.io.File;
+
 public class Constants {
     public interface ERROR_MSG {
         String UNKNOWN_ERROR = "Unknown Error !";
@@ -40,4 +44,16 @@ public class Constants {
     }
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    public interface STEP_COUNTER_FILE {
+        String FILE_NAME = "stepCountHistory.txt";
+        String FILE_TENP_NAME = "stepCountHistoryTemp.txt";
+        String PATH  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter/";
+        String PATH_TEMP  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/StepCounterTemp/";
+        File DIR = new File(PATH);
+        File DIR_TEMP = new File(PATH_TEMP);
+        File FILE =new File(PATH + FILE_NAME);
+        File FILE_TEMP =new File(PATH_TEMP+ FILE_TENP_NAME);
+    }
+
 }
