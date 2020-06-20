@@ -3,6 +3,7 @@ package thien.ntn.Health_are_app.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import thien.ntn.Health_are_app.service.ForegroundService;
 import thien.ntn.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,19 +32,12 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setDisplayHomeAsUpEnabled(true);
 
-//        actionBar.setDisplayShowHomeEnabled(true);
-//        actionBar.setLogo(R.drawable.settings);
-//        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#eac9c0"))));
+        actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#7b4bff"))));
 
-//        toolbar = getSupportActionBar();
-//
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-//
-//        toolbar.setTitle("Shop");
         BottomNavigationView bottomNav = findViewById(R.id.nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        startService();
 
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                     new TestFragmentActivity()).commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,16 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 intentExit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intentExit);
                 return true;
-//            case R.id.action_help:
-//                Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
-//                Intent sub1 = new Intent(this, hi.class);
-//                startActivity(sub1);
-//                return true;
             default:
                 return  super.onOptionsItemSelected(item);
         }
     }
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,14 +81,11 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_test:
                             selectedFragment = new TestFragmentActivity();
                             break;
+                        case R.id.nav_report:
+                            selectedFragment = new HomeActivity();
+                            break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileActivity();
-                            break;
-                        case R.id.nav_search:
-                            selectedFragment = new SearchFragmentActivity();
-                            break;
-                        case R.id.nav_home:
-                            selectedFragment = new HomeActivity();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -109,27 +94,13 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
-
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            Fragment fragment;
-//            switch (item.getItemId()) {
-//                case R.id.navigation_shop:
-//                    toolbar.setTitle("My Gifts1");
-//                    return true;
-//                case R.id.navigation_gifts:
-//                    toolbar.setTitle("My Gifts");
-//                    return true;
-//                case R.id.navigation_cart:
-//                    toolbar.setTitle("Cart");
-//                    return true;
-//                case R.id.navigation_profile:
-//                    toolbar.setTitle("Profile");
-//                    return true;
-//            }
-//            return false;
-//        }
-//    };
+    public void startService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        stopService(serviceIntent);
+    }
 }

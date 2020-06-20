@@ -12,14 +12,6 @@ import java.io.File;
 
 import thien.ntn.myapplication.R;
 
-
-/**
- * Created by Abhi on 4/28/2018.
- * This is the help activity for StepCounter Application.
- * Here we have given some general instructions to the user.
- * User is also given an option here to clear previous data history.
- */
-
 public class HelpActivity extends AppCompatActivity {
 
     //Reading/Writing the steps related history on to a local storage file

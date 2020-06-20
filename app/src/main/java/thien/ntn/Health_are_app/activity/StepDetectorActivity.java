@@ -31,17 +31,6 @@ import java.util.Date;
 
 import thien.ntn.myapplication.R;
 
-/**
- * Activity: StepDetectorActivity
- *
- * This handles the options of taking input for inch/step from user[default set to 10]
- * Start button to start the step detector service
- * Stop button to stop the step detector service
- * Displays number of steps taken ater starting the step detector service
- *
- * Created by Abhi on 4/8/2018.
- */
-
 public class StepDetectorActivity extends AppCompatActivity {
 
     EditText inchStep;

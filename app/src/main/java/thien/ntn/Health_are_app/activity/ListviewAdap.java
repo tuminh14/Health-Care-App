@@ -11,12 +11,6 @@ import java.util.ArrayList;
 
 import thien.ntn.myapplication.R;
 
-/**
- * Created by Abhi on 4/7/2018.
- * This implements the listview that needs to be displayed when user wants to track his step history
- */
-
-//Author: Abhilash Gudasi
 public class ListviewAdap extends ArrayAdapter<ListviewContent> implements View.OnClickListener {
 
     private ArrayList<ListviewContent> stepTripData;

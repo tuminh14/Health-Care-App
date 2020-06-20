@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,14 +31,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 import thien.ntn.myapplication.R;
-
-/**
- * Activity: TrackStepsActivity
- *
- * This displays graphical and list view of your steps taken trip in past
- * No data is lost unless user Opts to clear the data
- * Created by Abhi on 4/6/2018.
- */
 
 public class TrackStepsActivity extends AppCompatActivity {
 
@@ -92,11 +85,17 @@ public class TrackStepsActivity extends AppCompatActivity {
             Iterator it1 = lines.iterator();
             Iterator it2 = dates.iterator();
             DataPoint[] dp = new DataPoint[25];
+
+
+
             while (it1.hasNext() && it2.hasNext()) {
+
                 Date a = (Date)it2.next();
                 Integer b = Integer.parseInt(it1.next().toString().split("\t")[1]);
                 series.appendData(//new DataPoint(4, 6)
                         new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
+
+//                        new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
                          );
             }
             //series.appendData(new DataPoint(new Date(2018,04,16),20),true,100);

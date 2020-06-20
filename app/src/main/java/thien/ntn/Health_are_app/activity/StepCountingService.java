@@ -15,13 +15,6 @@ import android.util.Log;
 
 import java.io.File;
 
-/**
- * Created by Abhi on 4/8/2018.
- * Here we are handling the step detector service and broadcasting the values
- * On my Android Lenevo K5 note device step detector was more accurate than step counter sensor
- * So I have went ahead using step detector sensor.
- */
-
 public class StepCountingService extends Service implements SensorEventListener {
     SensorManager sensorManager;
     //Sensor stepCounterSensor;
@@ -150,4 +143,6 @@ public class StepCountingService extends Service implements SensorEventListener 
         //sendBroadcast sends a message to whoever is registered to receive it.
         sendBroadcast(intent);
     }
+
+
 }

@@ -1,11 +1,5 @@
 package thien.ntn.Health_are_app.activity;
 
-/**
- * Created by Abhi on 4/7/2018.
- * This implements single element in the list view
- */
-
-//Author: Paras Bansal
 public class ListviewContent {
 
     String recordedTime;
