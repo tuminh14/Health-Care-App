@@ -30,26 +30,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.myapplication.R;
 
 public class TrackStepsActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<ListviewContent> listviewContents;
-    private static ListviewAdap adapter;
-
-    //Reading/Writing the steps related history on to/from a local storage file
-    public String path  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter";
-    File myDirs = new File(path);
-    File file =new File(path+"/stepCountHistory.txt");
+    private static ListviewAdap adapter, adapterTemp;
 
     private Intent intentMainactivity;
-
+    //Nome temp file
     String[] lineDetail = new String[4];
     ArrayList<String> lines = new ArrayList<String>(); //Array list to store each line from the file
     ArrayList<Date> dates = new ArrayList<Date>();
 
-    //Author: Abhilash Gudasi, Paras Bansal
+    //Temp file
+    String[] lineDetailTemp = new String[4];
+    ArrayList<String> linesTemp = new ArrayList<String>(); //Array list to store each line from the file
+    ArrayList<Date> datesTemp = new ArrayList<Date>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +64,10 @@ public class TrackStepsActivity extends AppCompatActivity {
         GridLabelRenderer glr = graph.getGridLabelRenderer();
         glr.setPadding(60);
         graph.getViewport().setScrollable(true);
+
+        // Get data to from temp file
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "Cp1252"), 100); //Open the file to read
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP), "Cp1252"), 100); //Open the file to read
             String line;
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
@@ -82,19 +84,15 @@ public class TrackStepsActivity extends AppCompatActivity {
                // dates.add(new Date(interm1));
             }
 
+            //<Ve bieu do, khong can co the xoa
             Iterator it1 = lines.iterator();
             Iterator it2 = dates.iterator();
             DataPoint[] dp = new DataPoint[25];
-
-
-
             while (it1.hasNext() && it2.hasNext()) {
-
                 Date a = (Date)it2.next();
                 Integer b = Integer.parseInt(it1.next().toString().split("\t")[1]);
                 series.appendData(//new DataPoint(4, 6)
                         new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
-
 //                        new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
                          );
             }
@@ -108,20 +106,72 @@ public class TrackStepsActivity extends AppCompatActivity {
             graph.getViewport().setXAxisBoundsManual(true);
 
             graph.getGridLabelRenderer().setHumanRounding(false);
-
+            // />
 
             br.close();//Close the Buffer reader
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // Get data to from temp file
+        try {
+            BufferedReader brTemp = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE), "Cp1252"), 100); //Open the file to read
+            String lineTemp;
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
+            while ((lineTemp = brTemp.readLine()) != null) { //Read each Line from the file
+
+                lineDetailTemp = lineTemp.split("\t"); //Split the line by tab and store in a string array
+                linesTemp.add(lineDetailTemp[0] + "\t" + lineDetailTemp[1] + "\t" + lineDetailTemp[2] + "\t" + lineDetailTemp[3]);
+                //String interm = lineDetail[0].split(" ")[0];
+                String interm1Temp = lineDetailTemp[0];
+                SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+                Date date3Temp= formatter3.parse(interm1Temp);
+                datesTemp.add(date3Temp);
+
+            }
+
+            //<Ve bieu do, khong can co the xoa
+            Iterator it1 = lines.iterator();
+            Iterator it2 = dates.iterator();
+            DataPoint[] dp = new DataPoint[25];
+            while (it1.hasNext() && it2.hasNext()) {
+
+                Date a = (Date)it2.next();
+                Integer b = Integer.parseInt(it1.next().toString().split("\t")[1]);
+                series.appendData(//new DataPoint(4, 6)
+                        new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
+
+//                        new DataPoint(a, b),true,100 //new DataPoint(new Date(2018, 04, 16), 40),
+                );
+            }
+            //series.appendData(new DataPoint(new Date(2018,04,16),20),true,100);
+            graph.addSeries(series);
+
+            // set date label formatter
+            glr.setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext()));
+            glr.setNumHorizontalLabels(3);
+
+            graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getGridLabelRenderer().setHumanRounding(false);
+            // />
+
+            brTemp.close();//Close the Buffer reader
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Khoi tao list view
         listView=(ListView)findViewById(R.id.list);
 
+        // Khoi tao data de do vao listview
         listviewContents = new ArrayList<>();
         Iterator iter = lines.iterator();
         int i =0;
 
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        // Lay data tu arraylits da tao do vao listview none temp
         while(iter.hasNext()){
             String str = iter.next().toString();
             double distance = Double.parseDouble(str.split("\t")[2]);
@@ -130,6 +180,19 @@ public class TrackStepsActivity extends AppCompatActivity {
 
         adapter= new ListviewAdap(listviewContents,getApplicationContext());
         listView.setAdapter(adapter);
+
+        Iterator iterTemp = linesTemp.iterator();
+        int iTemp = 0;
+
+        // Lay data tu arraylits da tao do vao listview temp
+        while(iterTemp.hasNext()){
+            String strTemp = iterTemp.next().toString();
+            double distanceTemp = Double.parseDouble(strTemp.split("\t")[2]);
+            listviewContents.add(new ListviewContent(strTemp.split("\t")[0], strTemp.split("\t")[1]+" steps", decimalFormat.format(distanceTemp).toString()+" feets",strTemp.split("\t")[3],strTemp.split("\t")[3]+ " mins"));
+        }
+
+        adapterTemp= new ListviewAdap(listviewContents,getApplicationContext());
+        listView.setAdapter(adapterTemp);
     }
 
     private void buttonClickListener() {
@@ -139,8 +202,8 @@ public class TrackStepsActivity extends AppCompatActivity {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (file.exists()) {
-                    file.delete();
+                if (Constants.STEP_COUNTER_FILE.FILE.exists()) {
+                    Constants.STEP_COUNTER_FILE.FILE.delete();
                 }
                 String msg = "Data cleared";
                 Toast toast = Toast.makeText(TrackStepsActivity.this, msg, Toast.LENGTH_SHORT);
