@@ -137,6 +137,7 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
                         String birthDay = jsonObjectUser.getString("birthDay");
                         String weight = jsonObjectUser.getString("weight");
                         String height = jsonObjectUser.getString("height");
+                        String token = jsonObjectUser.getString("token");
 
                         SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
@@ -149,6 +150,7 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
                         editor.putString("birthDay", birthDay);
                         editor.putString("weight", weight);
                         editor.putString("height", height);
+                        editor.putString("token", "Bearer " + token);
 
                         editor.putString("success", strIsSuccess);
                         //Hoàn thành
