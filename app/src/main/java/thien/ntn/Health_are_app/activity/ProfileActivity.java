@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.myapplication.R;
 
 
@@ -52,7 +53,6 @@ public class ProfileActivity extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        postData();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ProfileActivity extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         AnhXa();
         //Nhận từ MainActivity
-        SharedPreferences sp = this.getActivity().getSharedPreferences("Save", Context.MODE_PRIVATE);
+        SharedPreferences sp = this.getActivity().getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.LOGIN_PROFILE, Context.MODE_PRIVATE);
         //Đọc dữ liệu
         txtName.setText(sp.getString("fullName", null));
         txtGender.setText(sp.getString("gender", null));
@@ -82,68 +82,6 @@ public class ProfileActivity extends Fragment {
         txtEmail = (TextView) getView().findViewById(R.id.txt_email);
     }
 
-    public void postData() {
-        RequestQueue requestQueue= Volley.newRequestQueue(getActivity().getApplicationContext());
-        String url="http://165.22.107.58/api/user/login";
-        JSONObject object = new JSONObject();
-        try {
-
-//            object.put("email",editEmail.getText().toString());
-//            object.put("passWord",editPassword.getText().toString());
-
-            object.put("email","duongtrantuminh14@gmail.com");
-            object.put("passWord","adminroot");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject jsonObjectPayload = response.getJSONObject("payload");
-                            JSONObject jsonObjectUser = jsonObjectPayload.getJSONObject("user");
-                            String gender = jsonObjectUser.getString("gender");
-
-                            String fullName = jsonObjectUser.getString("fullName");
-                            Toast.makeText(getActivity(), fullName + gender, Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Error getting response", Toast.LENGTH_SHORT).show();
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    public String readFile(String strFileInfo) {
-        try {
-            FileInputStream fileInputStream = getActivity().openFileInput(strFileInfo);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuffer stringBuffer = new StringBuffer();
-
-            String lines;
-            while ((lines = bufferedReader.readLine()) != null) {
-                stringBuffer.append(lines + "\n");
-            }
-            Toast.makeText(getActivity(), stringBuffer.toString(), Toast.LENGTH_SHORT).show();
-            Log.d("tets: ", stringBuffer.toString());
-
-            return stringBuffer.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "false1";
-    }
 }
 
 
