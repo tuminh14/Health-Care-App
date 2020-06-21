@@ -29,7 +29,7 @@
 *            type: Date
 *        example: {
 *          "email": "duongtrantuminh14@gmail.com",
-*          "passWord": "adminRoot",
+*          "passWord": "adminroot",
 *          "phoneNumber": "0943686018",
 *          "fullName": "Duong Tran Tu Minh",
 *          "gender": "male",
@@ -406,6 +406,306 @@
 *                       "error": {
                             "phoneNumber": "Invalid phone number"
                         }
+*               } 
+*       500:
+*         description: When got server exception
+* */
+
+/**
+* @swagger
+* /user/saveStepByDay:
+*  post:
+*    summary: verify phone number
+*    tags:
+*      - Users
+*    parameters:
+*      - in: body
+*        name: body
+*        required: true
+*        type: object
+*        properties:
+*          time:
+*            type: string
+*          date:
+*            type: string
+*          step:
+*            type: int
+*          totalDistance:
+*            type: int
+*          totalTime:
+*            type: int 
+*        example: {
+*          "time": "12:30:12",
+*           "date": "22/06/2020",
+*           "step": 10,
+*           "totalDistance": 10,
+*           "totalTime": 10,
+*        }
+*    responses:
+*       200:
+*         description: The response details
+*         schema:
+*           type: object
+*           properties:
+*             success:
+*               type: boolean
+*             payload:
+*               type: string
+*               description: Data result
+*           example: {
+                "success": true,
+                "payload": {
+                    "h0": [],
+                    "h1": [],
+                    "h2": [],
+                    "h3": [],
+                    "h4": [],
+                    "h5": [],
+                    "h6": [],
+                    "h7": [],
+                    "h8": [],
+                    "h9": [],
+                    "h10": [],
+                    "h11": [],
+                    "h12": [
+                        {
+                            "time": "12:30:12",
+                            "date": "22/06/2020",
+                            "step": "10",
+                            "totalTime": "10",
+                            "totalDistance": "10"
+                        }
+                    ],
+                    "h13": [],
+                    "h14": [],
+                    "h15": [],
+                    "h16": [],
+                    "h17": [],
+                    "h18": [],
+                    "h19": [],
+                    "h20": [],
+                    "h21": [],
+                    "h22": [],
+                    "h23": [],
+                    "_id": "5eef0da25fb3d661eb2d2e32",
+                    "userId": "ckboqyugh0002cbrw1q9u8fpu",
+                    "date": "22/06/2020"
+*    }
+*}
+*       401:
+*           description: Unauthorized
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 401,
+*                       "error": "Unauthorized"
+*                   }
+*               } 
+*       403:
+*           description: user not found
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 403,
+*                       "error": "Invalid user."
+*                   }
+*               } 
+*       500:
+*         description: When got server exception
+* */
+
+/**
+* @swagger
+* /user/deleteAllStep:
+*  delete:
+*    summary: deleteAllStep
+*    tags:
+*      - Users
+*    parameters:
+*      - in: body
+*        name: body
+*        required: false
+*        type: object
+*        properties:
+*        example: {
+*          
+*        }
+*    responses:
+*       200:
+*         description: The response details
+*         schema:
+*           type: object
+*           properties:
+*             success:
+*               type: boolean
+*             payload:
+*               type: string
+*               description: Data result
+*           example: {
+                "success": true,
+                "payloaf": {}
+*}
+*       401:
+*           description: Unauthorized
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 401,
+*                       "error": "Unauthorized"
+*                   }
+*               } 
+*       403:
+*           description: user not found
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 403,
+*                       "error": "Invalid user."
+*                   }
+*               } 
+*       500:
+*         description: When got server exception
+* */
+
+/**
+* @swagger
+* /user/getStepByDay:
+*  get:
+*    summary: get all step by day
+*    tags:
+*      - Users
+*    parameters:
+*    responses:
+*       200:
+*         description: The response details
+*         schema:
+*           type: object
+*           properties:
+*             success:
+*               type: boolean
+*             payload:
+*               type: string
+*               description: Data result
+*           example: {
+                "success": true,
+    "payload": [
+        {
+            "_id": "5eef0da25fb3d661eb2d2e32",
+            "h0": [],
+            "h1": [],
+            "h2": [],
+            "h3": [],
+            "h4": [],
+            "h5": [],
+            "h6": [],
+            "h7": [],
+            "h8": [],
+            "h9": [],
+            "h10": [],
+            "h11": [],
+            "h12": [
+                {
+                    "time": "12:30:12",
+                    "date": "22/06/2020",
+                    "step": "10",
+                    "totalTime": "10",
+                    "totalDistance": "10"
+                }
+            ],
+            "h13": [],
+            "h14": [],
+            "h15": [],
+            "h16": [],
+            "h17": [],
+            "h18": [],
+            "h19": [],
+            "h20": [],
+            "h21": [],
+            "h22": [],
+            "h23": [],
+            "userId": "ckboqyugh0002cbrw1q9u8fpu",
+            "date": "22/06/2020",
+            "__v": 0
+        }
+    ]
+*}
+*       401:
+*           description: Unauthorized
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 401,
+*                       "error": "Unauthorized"
+*                   }
+*               } 
+*       403:
+*           description: user not found
+*           schema:
+*               type: object
+*               properties:
+*                   error:
+*                       type: object
+*                       properties:
+*                           status:
+*                               type: int
+*                           error:
+*                               type: string
+*                               description: error messages
+*               example: {
+*                   "error": {
+*                       "status": 403,
+*                       "error": "Invalid user."
+*                   }
 *               } 
 *       500:
 *         description: When got server exception

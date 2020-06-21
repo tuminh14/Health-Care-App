@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import User from "./users.model"
 import globalConstant from "../config/globalConstants";
 const StepByDaySchema = mongoose.Schema({
-    userId: {type: String, required: true, unique: false, index: 0},
+    userId: {type: String, required: true, unique: false},
     date: {type: String, required:true},
     h0: [{type: Object}],
     h1: [{type: Object}],
