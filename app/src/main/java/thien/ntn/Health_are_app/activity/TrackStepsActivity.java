@@ -1,6 +1,8 @@
 package thien.ntn.Health_are_app.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -10,6 +12,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -17,10 +23,15 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -31,6 +42,8 @@ import java.util.Date;
 import java.util.Iterator;
 
 import thien.ntn.Health_are_app.config.Constants;
+import thien.ntn.Health_are_app.worker.DeleteAllStepWorker;
+import thien.ntn.Health_are_app.worker.GetStepByDayWorker;
 import thien.ntn.myapplication.R;
 
 public class TrackStepsActivity extends AppCompatActivity {
@@ -67,7 +80,7 @@ public class TrackStepsActivity extends AppCompatActivity {
 
         // Get data to from temp file
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP), "Cp1252"), 100); //Open the file to read
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE), "Cp1252"), 100); //Open the file to read
             String line;
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
@@ -77,7 +90,7 @@ public class TrackStepsActivity extends AppCompatActivity {
                 lines.add(lineDetail[0] + "\t" + lineDetail[1] + "\t" + lineDetail[2] + "\t" + lineDetail[3]);
                 //String interm = lineDetail[0].split(" ")[0];
                 String interm1 = lineDetail[0];
-                SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+                SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Date date3=formatter3.parse(interm1);
                 dates.add(date3);
 
@@ -115,7 +128,7 @@ public class TrackStepsActivity extends AppCompatActivity {
 
         // Get data to from temp file
         try {
-            BufferedReader brTemp = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE), "Cp1252"), 100); //Open the file to read
+            BufferedReader brTemp = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP), "Cp1252"), 100); //Open the file to read
             String lineTemp;
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
@@ -125,7 +138,7 @@ public class TrackStepsActivity extends AppCompatActivity {
                 linesTemp.add(lineDetailTemp[0] + "\t" + lineDetailTemp[1] + "\t" + lineDetailTemp[2] + "\t" + lineDetailTemp[3]);
                 //String interm = lineDetail[0].split(" ")[0];
                 String interm1Temp = lineDetailTemp[0];
-                SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+                SimpleDateFormat formatter3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Date date3Temp= formatter3.parse(interm1Temp);
                 datesTemp.add(date3Temp);
 
@@ -202,16 +215,14 @@ public class TrackStepsActivity extends AppCompatActivity {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (Constants.STEP_COUNTER_FILE.FILE.exists()) {
-                    Constants.STEP_COUNTER_FILE.FILE.delete();
+                SharedPreferences sp = getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.LOGIN_PROFILE, Context.MODE_PRIVATE);
+                String token = sp.getString("token", "");
+                try {
+                    getData(token);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                String msg = "Data cleared";
-                Toast toast = Toast.makeText(TrackStepsActivity.this, msg, Toast.LENGTH_SHORT);
-                toast.show();
 
-                intentMainactivity = new Intent(TrackStepsActivity.this, TrackStepsActivity.class);
-                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentMainactivity);
             }
         });
 
@@ -224,6 +235,74 @@ public class TrackStepsActivity extends AppCompatActivity {
                 intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentMainactivity);
             }
+        });
+    }
+
+    public void getData(String token) throws IOException {
+        Data.Builder requestData = new Data.Builder();
+        requestData.putString("token", token);
+        // Create worker
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(DeleteAllStepWorker.class)
+                .setInputData(requestData.build())
+                .build();
+
+        // Push worker to queue
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+        WorkManager.getInstance().getWorkInfoByIdLiveData(oneTimeWorkRequest.getId()).observe(this, workStatus -> {
+            try {
+
+                if (workStatus.getState() == WorkInfo.State.SUCCEEDED) {
+                    Data data = workStatus.getOutputData();
+                    String result = data.getString("result");
+
+                    JSONObject request = new JSONObject(result);
+
+                    Boolean isSuccess = request.getBoolean("success");
+
+                    if (!isSuccess) {
+                        JSONObject error = request.getJSONObject("error");
+                        String msgError;
+                        try {
+                            // Get order error message
+                            msgError = error.getString("error");
+                        } catch (JSONException e) {
+                            // get validate message
+                            String errorString = error.toString().replaceAll("[\"{}]","");
+                            String[] ListError = errorString.split("[,:]");
+                            // select first validate message error
+                            msgError = ListError[1];
+                        }
+                        Toast.makeText(getApplicationContext(), msgError, Toast.LENGTH_SHORT).show();
+
+
+//                        setShowButton();
+                    } else {
+                        if (Constants.STEP_COUNTER_FILE.FILE.exists()) {
+                            Constants.STEP_COUNTER_FILE.FILE.delete();
+                        }
+                        if (Constants.STEP_COUNTER_FILE.FILE_TEMP.exists()) {
+                            Constants.STEP_COUNTER_FILE.FILE_TEMP.delete();
+                        }
+                        String msg = "Data cleared";
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        intentMainactivity = new Intent(TrackStepsActivity.this, TrackStepsActivity.class);
+                        intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentMainactivity);
+
+                    }
+                } else {
+                    if (workStatus.getState() == WorkInfo.State.FAILED) {
+                        Data data = workStatus.getOutputData();
+                        String msgError = data.getString("result");
+                        Toast.makeText(getApplicationContext(), msgError, Toast.LENGTH_SHORT).show();
+//                        setShowButton();
+                    }
+                }
+            } catch (JSONException e ) {
+                Toast.makeText(getApplicationContext(), Constants.ERROR_MSG.UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
+
+            }
+
         });
     }
 }

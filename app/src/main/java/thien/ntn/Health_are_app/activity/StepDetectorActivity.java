@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import thien.ntn.Health_are_app.config.Constants;
+import thien.ntn.Health_are_app.util.FileStream;
 import thien.ntn.myapplication.R;
 
 public class StepDetectorActivity extends AppCompatActivity {
@@ -102,7 +103,7 @@ public class StepDetectorActivity extends AppCompatActivity {
                 toast.show();
 
                 //Recording date and time
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String format = sdf.format(Calendar.getInstance().getTime());
                 //saveText[0] =  DateFormat.getDateTimeInstance().format(new Date());
                 saveText[0] =  format;
@@ -146,7 +147,7 @@ public class StepDetectorActivity extends AppCompatActivity {
                     //To save the current step count results on to local file
 
                     try {
-                        Save (Constants.STEP_COUNTER_FILE.FILE_TEMP,saveText);
+                        FileStream.Save(Constants.STEP_COUNTER_FILE.FILE_TEMP,Constants.STEP_COUNTER_FILE.DIR_TEMP,saveText);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -192,41 +193,6 @@ public class StepDetectorActivity extends AppCompatActivity {
         counter = (TextView)findViewById(R.id.counter);
     }
 
-    /*
-    *Method to save the contact in to the local database(text file)
-    *Author: Abhilash Gudasi
-     */
-    private void Save(File myfile,String[] data) throws IOException {
-        if(!Constants.STEP_COUNTER_FILE.DIR_TEMP.exists()){
-            Constants.STEP_COUNTER_FILE.DIR_TEMP.mkdirs();
-        }
-        if(!myfile.exists()){
-            myfile.createNewFile();
-        }
-        FileOutputStream fos = null;
-        OutputStreamWriter myOutWriter = null;
-        try
-        {
-            fos = new FileOutputStream(Constants.STEP_COUNTER_FILE.FILE_TEMP,true);
-            myOutWriter = new OutputStreamWriter(fos);
-        }
-        catch (FileNotFoundException e)
-        {e.printStackTrace();}
-        try
-        {
-            for(int i=0;i<4;i++) {
-                myOutWriter.append(data[i]);
-                myOutWriter.append("\t");
-            }
-            myOutWriter.append("\n");
-
-        }
-        finally
-        {
-            myOutWriter.close();
-            fos.close();
-        }
-    }
 
     protected void onPause() {
         super.onPause();

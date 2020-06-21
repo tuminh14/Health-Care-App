@@ -46,14 +46,20 @@ public class Constants {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     public interface STEP_COUNTER_FILE {
-        String FILE_NAME = "stepCountHistory.txt";
-        String FILE_TENP_NAME = "stepCountHistoryTemp.txt";
-        String PATH  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter/";
-        String PATH_TEMP  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/StepCounterTemp/";
+        String PATH  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter";
         File DIR = new File(PATH);
-        File DIR_TEMP = new File(PATH_TEMP);
+        String FILE_NAME = "/stepCountHistory.txt";
         File FILE =new File(PATH + FILE_NAME);
-        File FILE_TEMP =new File(PATH_TEMP+ FILE_TENP_NAME);
+
+        String PATH_TEMP  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/StepCounterTemp";
+        File DIR_TEMP = new File(PATH_TEMP);
+        String FILE_TENP_NAME = "/stepCountHistoryTemp.txt";
+        File FILE_TEMP = new File(PATH_TEMP+ FILE_TENP_NAME);
+
+        String PATH_TEMP_ERROR  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/StepCounterTemp";
+        File DIR_TEMP_ERROR = new File(PATH_TEMP_ERROR);
+        String FILE_TENP_NAME_ERROR = "/stepCountHistoryTempError.txt";
+        File FILE_TEMP_ERROR = new File(PATH_TEMP_ERROR+ FILE_TENP_NAME_ERROR);
     }
 
 }
