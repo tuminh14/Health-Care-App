@@ -137,9 +137,9 @@ public class VerifyPhoneNumberActivity extends AppCompatActivity {
                         String birthDay = jsonObjectUser.getString("birthDay");
                         String weight = jsonObjectUser.getString("weight");
                         String height = jsonObjectUser.getString("height");
-                        String token = jsonObjectUser.getString("token");
+                        String token = payloadObject.getString("token");
 
-                        SharedPreferences sp = getSharedPreferences("Save", MODE_PRIVATE);
+                        SharedPreferences sp = getSharedPreferences(Constants.SHARE_PREFERENCES_NAME.LOGIN_PROFILE, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.clear();
                         //Lưu dữ liệu
