@@ -1,0 +1,40 @@
+const serverPort = process.env.PORT || 3001; // The port server will running
+const serverHost = process.env.SERVER_HOST || 'localhost';
+const dbHost = process.env.MONGO_HOST||'localhost';
+const databaseName = process.env.MONGO_DATABASE_NAME||'health-care-app';
+const dbPort = process.env.MONGO_PORT||27017;
+const dbUser = process.env.USER_ADMIN||"admin";
+const dbPassword = process.env.PASS_ADMIN||"admin";
+const domainName = process.env.DOMAIN_NAME || `${serverHost}:${serverPort}`;
+const config = {
+    mongoURL: process.env.MONGO_URL || `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${databaseName}`,
+    dbPort,
+    databaseName,
+    serverHost,
+    serverPort,
+    //domain
+    domainName,
+    //jwt
+    jwtSecret: process.env.JWT_SECRET || '',
+    //rabbitmq
+    rabbitMQ: {
+        url: process.env.RABBIT_URL || 'amqp://localhost'
+    },
+    CORS_OPTIONS : {
+        // Find and fill your options here: https://github.com/expressjs/cors#configuration-options
+        origin: process.env.SERVER_ORIGIN || '*',
+        methods: 'GET,PUT,POST,DELETE',
+        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,Accept-Language',
+    },
+    twilio: {
+        serviceID: process.env.SERVICE_ID || '',
+        accountSID: process.env.ACCOUNT_SID|| '',
+        authToken: process.env.AUTH_TOKEN || ''
+    },
+    mail: {
+        USER: process.env.MAIL_USER || "",
+        PASSWORD: process.env.MAIL_PASSWORD || ""
+    }
+};
+ export default config;
+
