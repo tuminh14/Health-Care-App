@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="thien.ntn.myapplication">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -25,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
         <activity android:name="thien.ntn.Health_are_app.activity.TestReportActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.TestFragmentActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.HelpActivity" />
@@ -35,23 +33,24 @@
         <activity android:name="thien.ntn.Health_are_app.activity.MainActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ProfileActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ListViewActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity"/>
+        <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.SearchFragmentActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.VerifyPhoneNumberActivity"/>
-        <activity android:name="thien.ntn.Health_are_app.activity.LoginPhoneNumberActivity"/>
-        <activity android:name="thien.ntn.Health_are_app.activity.LoginActivity">
+        <activity android:name="thien.ntn.Health_are_app.activity.VerifyPhoneNumberActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.LoginPhoneNumberActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.LoginActivity"/>
+        <activity android:name="thien.ntn.Health_are_app.activity.LoadScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name="thien.ntn.Health_are_app.service.StepCountingService" />
-
         <service
             android:name="thien.ntn.Health_are_app.service.ForegroundService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>
