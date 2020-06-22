@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bgsign"
+    tools:context="thien.ntn.Health_are_app.activity.TestFragmentActivity">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_start"
+        android:layout_width="168dp"
+        android:layout_height="55dp"
+        android:layout_alignStart="@+id/button_track"
+        android:layout_marginStart="-4dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bgbtn"
+        android:text="@string/start_count"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button_track"
+        android:layout_width="168dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/button_start"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="-7dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bgbtn"
+        android:text="@string/track_steps"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/button_help"
+        android:layout_width="168dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/button_track"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="-7dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bgbtn"
+        android:text="@string/help"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/button_exit"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/button_track"
+        android:layout_marginTop="135dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/game_exit" />
+
+</RelativeLayout>
+</ScrollView>

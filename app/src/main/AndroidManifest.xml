@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="thien.ntn.myapplication">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <activity android:name="thien.ntn.Health_are_app.activity.TestReportActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.TestFragmentActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.HelpActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.StepDetectorActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.TrackStepsActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.RegisterActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.MainActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.ProfileActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.ListViewActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity"/>
+        <activity android:name="thien.ntn.Health_are_app.activity.SearchFragmentActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.VerifyPhoneNumberActivity"/>
+        <activity android:name="thien.ntn.Health_are_app.activity.LoginPhoneNumberActivity"/>
+        <activity android:name="thien.ntn.Health_are_app.activity.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+
+        <service android:name="thien.ntn.Health_are_app.service.StepCountingService" />
+
+        <service
+            android:name="thien.ntn.Health_are_app.service.ForegroundService"
+            android:enabled="true"
+            android:exported="true"></service>
+    </application>
+
+</manifest>
