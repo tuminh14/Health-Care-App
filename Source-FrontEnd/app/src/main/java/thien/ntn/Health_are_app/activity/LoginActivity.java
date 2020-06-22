@@ -37,7 +37,13 @@ public class LoginActivity extends AppCompatActivity {
     String strFilePhoneNumber = "FilePhoneNumber.txt";
     String strFileBirthDay = "FileBirthDay.txt";
     String strFileEmail = "FileEmail.txt";
-
+    public void onBackPressed()
+    {
+        Intent intentExit = new Intent(Intent.ACTION_MAIN);
+        intentExit.addCategory(Intent.CATEGORY_HOME);
+        intentExit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentExit);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
