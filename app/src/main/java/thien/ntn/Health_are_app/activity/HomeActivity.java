@@ -1,19 +1,12 @@
 package thien.ntn.Health_are_app.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,12 +22,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import thien.ntn.Health_are_app.adapter.Listview2Adapter;
+import thien.ntn.Health_are_app.util.ListviewContent;
 import thien.ntn.myapplication.R;
 
 
@@ -42,7 +36,7 @@ public class HomeActivity extends Fragment {
 
     ListView listView;
     ArrayList<ListviewContent> listviewContents;
-    private static ListviewAdap adapter;
+    private static Listview2Adapter adapter;
 
     //Reading/Writing the steps related history on to/from a local storage file
     public String path  = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Step Counter";

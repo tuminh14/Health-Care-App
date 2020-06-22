@@ -1,4 +1,4 @@
-package thien.ntn.Health_are_app.activity;
+package thien.ntn.Health_are_app.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import thien.ntn.Health_are_app.util.ListviewContent;
 import thien.ntn.myapplication.R;
 
-public class ListviewAdap extends ArrayAdapter<ListviewContent> implements View.OnClickListener {
+public class Listview2Adapter extends ArrayAdapter<ListviewContent> implements View.OnClickListener {
 
     private ArrayList<ListviewContent> stepTripData;
     Context mContext;
@@ -24,7 +25,7 @@ public class ListviewAdap extends ArrayAdapter<ListviewContent> implements View.
         TextView txttimeTaken;
     }
 
-    public ListviewAdap(ArrayList<ListviewContent> data, Context context) {
+    public Listview2Adapter(ArrayList<ListviewContent> data, Context context) {
         super(context, R.layout.row_view, data);
         this.stepTripData = data;
         this.mContext = context;

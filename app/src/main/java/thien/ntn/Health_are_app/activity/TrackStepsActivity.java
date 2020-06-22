@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -23,34 +22,30 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import thien.ntn.Health_are_app.adapter.Listview2Adapter;
 import thien.ntn.Health_are_app.config.Constants;
+import thien.ntn.Health_are_app.util.ListviewContent;
 import thien.ntn.Health_are_app.worker.DeleteAllStepWorker;
-import thien.ntn.Health_are_app.worker.GetStepByDayWorker;
 import thien.ntn.myapplication.R;
 
 public class TrackStepsActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<ListviewContent> listviewContents;
-    private static ListviewAdap adapter, adapterTemp;
+    private static Listview2Adapter adapter, adapterTemp;
 
     private Intent intentMainactivity;
     //Nome temp file
@@ -191,7 +186,7 @@ public class TrackStepsActivity extends AppCompatActivity {
             listviewContents.add(new ListviewContent(str.split("\t")[0], str.split("\t")[1]+" steps", decimalFormat.format(distance).toString()+" feets",str.split("\t")[3],str.split("\t")[3]+ " mins"));
         }
 
-        adapter= new ListviewAdap(listviewContents,getApplicationContext());
+        adapter= new Listview2Adapter(listviewContents,getApplicationContext());
         listView.setAdapter(adapter);
 
         Iterator iterTemp = linesTemp.iterator();
@@ -204,7 +199,7 @@ public class TrackStepsActivity extends AppCompatActivity {
             listviewContents.add(new ListviewContent(strTemp.split("\t")[0], strTemp.split("\t")[1]+" steps", decimalFormat.format(distanceTemp).toString()+" feets",strTemp.split("\t")[3],strTemp.split("\t")[3]+ " mins"));
         }
 
-        adapterTemp= new ListviewAdap(listviewContents,getApplicationContext());
+        adapterTemp= new Listview2Adapter(listviewContents,getApplicationContext());
         listView.setAdapter(adapterTemp);
     }
 

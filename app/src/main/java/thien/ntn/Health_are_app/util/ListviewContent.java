@@ -1,4 +1,4 @@
-package thien.ntn.Health_are_app.activity;
+package thien.ntn.Health_are_app.util;
 
 public class ListviewContent {
 

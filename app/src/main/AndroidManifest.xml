@@ -46,7 +46,7 @@
              </intent-filter>
         </activity>
 
-        <service android:name="thien.ntn.Health_are_app.activity.StepCountingService" />
+        <service android:name="thien.ntn.Health_are_app.service.StepCountingService" />
 
         <service
             android:name="thien.ntn.Health_are_app.service.ForegroundService"

@@ -1,4 +1,4 @@
-package thien.ntn.Health_are_app.activity;
+package thien.ntn.Health_are_app.service;
 
 import android.app.PendingIntent;
 import android.app.Service;
