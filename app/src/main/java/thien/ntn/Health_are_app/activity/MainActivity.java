@@ -17,12 +17,14 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import thien.ntn.Health_are_app.config.Constants;
 import thien.ntn.Health_are_app.service.ForegroundService;
 import thien.ntn.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
 
 //    private ActionBar toolbar;
+    private Intent intentMainactivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed()
+    {
+        Intent intentExit = new Intent(Intent.ACTION_MAIN);
+        intentExit.addCategory(Intent.CATEGORY_HOME);
+        intentExit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentExit);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home){
@@ -61,10 +72,19 @@ public class MainActivity extends AppCompatActivity {
         }
         switch (id){
             case R.id.action_exit:
-                Intent intentExit = new Intent(Intent.ACTION_MAIN);
-                intentExit.addCategory(Intent.CATEGORY_HOME);
-                intentExit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intentExit);
+
+                //delete 2 files
+                if (Constants.STEP_COUNTER_FILE.FILE.exists()) {
+                    Constants.STEP_COUNTER_FILE.FILE.delete();
+                }
+                if (Constants.STEP_COUNTER_FILE.FILE_TEMP.exists()) {
+                    Constants.STEP_COUNTER_FILE.FILE_TEMP.delete();
+                }
+
+                intentMainactivity = new Intent(MainActivity.this, LoginActivity.class);
+                intentMainactivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentMainactivity);
+
                 return true;
             default:
                 return  super.onOptionsItemSelected(item);
@@ -81,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_test:
                             selectedFragment = new TestFragmentActivity();
                             break;
-                        case R.id.nav_report:
-                            selectedFragment = new HomeActivity();
-                            break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileActivity();
                             break;
@@ -96,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             };
     public void startService() {
         Intent serviceIntent = new Intent(this, ForegroundService.class);
-        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android");
+        serviceIntent.putExtra("inputExtra", "Health app is running in background");
         ContextCompat.startForegroundService(this, serviceIntent);
     }
     public void stopService() {

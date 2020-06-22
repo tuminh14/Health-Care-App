@@ -35,7 +35,7 @@
         <activity android:name="thien.ntn.Health_are_app.activity.MainActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ProfileActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.ListViewActivity" />
-        <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity" />
+        <activity android:name="thien.ntn.Health_are_app.activity.HomeActivity"/>
         <activity android:name="thien.ntn.Health_are_app.activity.SearchFragmentActivity" />
         <activity android:name="thien.ntn.Health_are_app.activity.VerifyPhoneNumberActivity"/>
         <activity android:name="thien.ntn.Health_are_app.activity.LoginPhoneNumberActivity"/>

@@ -1,6 +1,7 @@
 package thien.ntn.Health_are_app.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +82,8 @@ public class ProfileActivity extends Fragment {
         txtBirthDay = (TextView) getView().findViewById(R.id.txt_birth_day);
         txtEmail = (TextView) getView().findViewById(R.id.txt_email);
     }
+
+
 
 }
 

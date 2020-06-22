@@ -95,6 +95,8 @@ public class StepDetectorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                back.setVisibility(View.GONE);
+
                 start.setVisibility(View.GONE);
                 stop.setVisibility(View.VISIBLE);
 
@@ -167,6 +169,8 @@ public class StepDetectorActivity extends AppCompatActivity {
 //                    catch (IOException e) {
 //                        //You'll need to add proper error handling here
 //                    }
+
+                    back.setVisibility(View.VISIBLE);
 
                     Intent intentReportactivity = new Intent(StepDetectorActivity.this, TestReportActivity.class);
                     intentReportactivity.putExtra("report",saveText);

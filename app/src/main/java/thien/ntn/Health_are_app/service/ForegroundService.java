@@ -32,9 +32,9 @@ public class ForegroundService extends Service {
                 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service")
+                .setContentTitle("Health Care App")
                 .setContentText(input)
-                .setSmallIcon(R.drawable.ic_stat_name)
+                .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
                 .setContentIntent(pendingIntent)
                 .build();
 
